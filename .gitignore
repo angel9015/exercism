@@ -270,3 +270,5 @@ dmypy.json
 *.exe
 .gradle/*
 *.obj
+.gradle
+.gradle/*
