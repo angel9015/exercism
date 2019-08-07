@@ -1,5 +1,5 @@
 
-const NUC_TRANSLATIONS = {
+const NUCL_TRANCRIPTIONS = {
   'G': 'C',
   'C': 'G',
   'T': 'A',
@@ -7,7 +7,7 @@ const NUC_TRANSLATIONS = {
 }
 
 export const toRna = (strand) => {
-  return strand.split("").map(
-    nucl => NUC_TRANSLATIONS[nucl]
+  return [...strand].map(
+    nucl => NUCL_TRANCRIPTIONS[nucl]
   ).join("")
 };
