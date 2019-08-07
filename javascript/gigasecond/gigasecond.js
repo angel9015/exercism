@@ -3,8 +3,7 @@
 // convenience to get you started writing code faster.
 //
 
-export const gigasecond = (moment) => {
-  return new Date(
-    (moment.getTime()/1000 + 1000000000)*1000
-  )
+export const gigasecond = (time) => {
+  const GIGASECOND_IN_MS = 1e9 * 1000;
+  return new Date(time.getTime() + GIGASECOND_IN_MS)
 };
