@@ -272,3 +272,6 @@ dmypy.json
 *.obj
 .gradle
 .gradle/*
+
+!elixir/*/lib/
+tags*
