@@ -13,23 +13,20 @@ defmodule Roman do
   Convert the number to a roman number.
   """
   @spec numerals(pos_integer) :: String.t()
-  def numerals(number) when is_integer(number) and number <= 3999 do
-    number
-    # Let's suppose we have 42
-    |> digits_as_list
-    # It will be converted to [4,2]
-    |> Enum.reverse()
-    # Will be reversed ie [2,4] to properly add the 10 powers
-    |> add_ten_power_indeces
-    # Now we'll have [{2,1}, {4,10}]
-    |> Enum.map(&to_roman_digit/1)
-    # Each digit+power will be converted accordingly i.e it will be
-    # ["II", "XL"]
-    |> Enum.reverse()
-    # Reverse again to have the correct order ie ["XL", "II"]
-    |> Enum.join()
+  def numerals(number) when is_integer(number) and number < 10 do
+    to_roman_digit({number, 1})
+  end
 
-    # Return the joined string "XLII'
+  def numerals(number) when is_integer(number) and number < 100 do
+    to_roman_digit({div(number, 10), 10}) <> numerals(rem(number, 10))
+  end
+
+  def numerals(number) when is_integer(number) and number < 1000 do
+    to_roman_digit({div(number, 100), 100}) <> numerals(rem(number, 100))
+  end
+
+  def numerals(number) when is_integer(number) and number <= 3999 do
+    to_roman_digit({div(number, 1000), 1000}) <> numerals(rem(number, 1000))
   end
 
   # Convert a digit to roman using different symbols depending on its base
@@ -44,23 +41,5 @@ defmodule Roman do
       digit in [9] -> @symbols[base] <> @symbols[base * 10]
       digit == 0 -> ""
     end
-  end
-
-  # Add a proper power of 10 to the digits for example
-  # [1,2,3] will be converted to
-  # [{1, 10^0}, {2, 10^1}, {3, 10^2}]==
-  # [{1, 1}, {2, 10}, {3, 100}]
-  defp add_ten_power_indeces(digits) do
-    digits
-    |> Enum.with_index()
-    |> Enum.map(fn {d, i} -> {d, :math.pow(10, i) |> round} end)
-  end
-
-  # Return the digits of a number as a list, i.e 123 will return [1,2,3]
-  defp digits_as_list(n) do
-    n
-    |> Integer.to_string()
-    |> String.graphemes()
-    |> Enum.map(&(&1 |> Integer.parse() |> elem(0)))
   end
 end
