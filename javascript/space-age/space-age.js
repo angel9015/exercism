@@ -11,5 +11,5 @@ const PLANET_ORBITS_IN_S = {
 }
 
 export const age = (planet, seconds) => {
-  return Math.round(seconds / PLANET_ORBITS_IN_S[planet] * 100) / 100;
+  return +(seconds / PLANET_ORBITS_IN_S[planet]).toFixed(2);
 };
