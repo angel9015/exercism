@@ -274,4 +274,5 @@ dmypy.json
 .gradle/*
 
 !elixir/*/lib/
+.elixir_ls/
 tags*

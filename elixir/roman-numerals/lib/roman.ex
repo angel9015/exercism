@@ -28,6 +28,7 @@ defmodule Roman do
     |> Enum.reverse()
     # Reverse again to have the correct order ie ["XL", "II"]
     |> Enum.join()
+
     # Return the joined string "XLII'
   end
 
