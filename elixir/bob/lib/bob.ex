@@ -5,10 +5,10 @@ defmodule Bob do
         "Fine. Be that way!"
 
       input == input |> String.upcase() and input |> String.last() == "?" and
-          input |> String.match?(~r/[[:alpha:]]/) ->
+          input != input |> String.downcase() ->
         "Calm down, I know what I'm doing!"
 
-      input == input |> String.upcase() and input |> String.match?(~r/[[:alpha:]]/) ->
+      input == input |> String.upcase() and input != input |> String.downcase() ->
         "Whoa, chill out!"
 
       input |> String.last() == "?" ->
