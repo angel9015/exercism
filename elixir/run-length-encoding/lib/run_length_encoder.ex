@@ -35,8 +35,10 @@ defmodule RunLengthEncoder do
   defp decoder_same_char_string(el, acc) do
     case Integer.parse(el) do
       # This char is a number just update the accumulator key
+      # taking into account that we may have more than 1 digits to
+      # the repeat number
       {number, ""} ->
-        acc |> Map.put(:number, number)
+         acc |> Map.put(:number, 10 * Map.get(acc, :number, 0) + number)
 
       # We've found a character, use the number to duplicate this to res
       # (if number is not found then it will  be put once )
