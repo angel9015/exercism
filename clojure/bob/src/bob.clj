@@ -1,6 +1,9 @@
 (ns bob
   (:require [clojure.string :as str]))
 
+(defn- is-empty? [s]
+  (= (str/trim s) ""))
+
 (defn- is-question? [s]
   (= (last s) \?))
 
@@ -9,7 +12,7 @@
 
 (defn response-for [s]
   (cond
-    (= (str/trim s) "") "Fine. Be that way!"
+    (is-empty? s) "Fine. Be that way!"
     (and (is-question? s) (is-upcase? s)) "Calm down, I know what I'm doing!"
     (is-upcase? s) "Whoa, chill out!"
     (is-question? s) "Sure."
