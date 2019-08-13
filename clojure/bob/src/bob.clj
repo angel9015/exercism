@@ -8,8 +8,8 @@
   (= (last s) \?))
 
 (defn- is-upcase? [s]
-  (and (not= s (str/lower-case s)) (= s (str/upper-case s))))
-
+  (and (not-any? #(Character/isLowerCase %) s) (some #(Character/isUpperCase %) s)))
+  
 (defn response-for [s]
   (cond
     (is-empty? s) "Fine. Be that way!"
