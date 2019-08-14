@@ -4,6 +4,31 @@
 LIBS = -lm
 
 ###
-tests.exe: 
+CFLAGS  = -std=c99
+CFLAGS += -g
+CFLAGS += -Wall
+CFLAGS += -Wextra
+CFLAGS += -pedantic
+CFLAGS += -Werror
+CFLAGS += -Wmissing-declarations
+CFLAGS += -DUNITY_SUPPORT_64
+
+ASANFLAGS  = -fsanitize=address
+ASANFLAGS += -fno-common
+ASANFLAGS += -fno-omit-frame-pointer
+
+test: tests.out
+	@./tests.out
+
+memcheck: test/*.c src/*.c src/*.h
 	@echo Compiling $@
-	@$(CC) $(CFLAGS) src\*.c test/vendor/unity.c test/*.c $(LIBS)
+	@$(CC) $(ASANFLAGS) $(CFLAGS) src/*.c test/vendor/unity.c test/*.c -o memcheck.out $(LIBS)
+	@./memcheck.out
+	@echo "Memory check passed"
+
+clean:
+	rm -rf *.o *.out *.out.dSYM
+
+tests.out: test/*.c src/*.c src/*.h
+	@echo Compiling $@
+	@$(CC) $(CFLAGS) src/*.c test/vendor/unity.c test/*.c -o tests.out $(LIBS)
