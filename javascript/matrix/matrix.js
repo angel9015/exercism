@@ -13,10 +13,14 @@ export class Matrix {
   }
 
   get columns() {
+    return this.transpose(this.matrix)
+  }
+
+  transpose(rows) {
     let resultMatrix = []
     
     // Add transposed rows / cols to result
-    this.matrix.forEach( (row, rowIdx) => {
+    rows.forEach( (row, rowIdx) => {
       row.forEach( (el, elIdx) => {
         if(resultMatrix[elIdx]==undefined) resultMatrix.push([])
         resultMatrix[elIdx][rowIdx] = el;
