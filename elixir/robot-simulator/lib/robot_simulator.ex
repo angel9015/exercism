@@ -36,7 +36,7 @@ defmodule RobotSimulator do
 
   defp move_robot(_, _), do: {:error, "invalid instruction"}
 
-  defp advance(%{dir: dir, pos: {x, y}}=robot) do
+  defp advance(%{dir: dir, pos: {x, y}} = robot) do
     case dir do
       :north -> %{robot | pos: {x, y + 1}}
       :south -> %{robot | pos: {x, y - 1}}
@@ -45,7 +45,7 @@ defmodule RobotSimulator do
     end
   end
 
-  defp turn_left(%{dir: dir, pos: _pos}=robot) do
+  defp turn_left(%{dir: dir, pos: _pos} = robot) do
     case dir do
       :north -> %{robot | dir: :west}
       :south -> %{robot | dir: :east}
@@ -54,7 +54,7 @@ defmodule RobotSimulator do
     end
   end
 
-  defp turn_right(%{dir: dir, pos: _pos}=robot) do
+  defp turn_right(%{dir: dir, pos: _pos} = robot) do
     case dir do
       :north -> %{robot | dir: :east}
       :south -> %{robot | dir: :west}
