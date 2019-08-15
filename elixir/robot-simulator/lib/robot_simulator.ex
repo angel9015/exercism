@@ -1,6 +1,13 @@
 defmodule RobotSimulator do
   @valid_directions [:north, :east, :south, :west]
   @valid_instructions ["A", "L", "R"]
+
+  defguard is_valid_robot(direction, x, y)
+           when direction in @valid_directions and is_number(x) and is_number(y)
+
+  defguard is_valid_instruction(instruction)
+           when instruction in @valid_instructions
+
   @doc """
   Create a Robot Simulator given an initial direction and position.
 
@@ -8,8 +15,9 @@ defmodule RobotSimulator do
   """
   @spec create(direction :: atom, position :: {integer, integer}) :: any
   def create(direction \\ :north, pos \\ {0, 0})
+
   def create(direction, {x, y})
-      when direction in @valid_directions and is_number(x) and is_number(y) do
+      when is_valid_robot(direction, x, y) do
     %{dir: direction, pos: {x, y}}
   end
 
@@ -17,44 +25,43 @@ defmodule RobotSimulator do
   def create(_, _), do: {:error, "invalid direction"}
 
   defp move_robot(_, {:error, error}), do: {:error, error}
-  defp move_robot(instruction, robot) when instruction in @valid_instructions do
+
+  defp move_robot(instruction, robot) when is_valid_instruction(instruction) do
     case instruction do
       "A" -> advance(robot)
       "L" -> turn_left(robot)
       "R" -> turn_right(robot)
     end
   end
+
   defp move_robot(_, _), do: {:error, "invalid instruction"}
 
-  defp advance(%{dir: dir, pos: {x, y}}) do
+  defp advance(%{dir: dir, pos: {x, y}}=robot) do
     case dir do
-      :north -> %{dir: dir, pos: {x, y+1}}
-      :south -> %{dir: dir, pos: {x, y-1}}
-      :east  -> %{dir: dir, pos: {x+1, y}}
-      :west  -> %{dir: dir, pos: {x-1, y}}
+      :north -> %{robot | pos: {x, y + 1}}
+      :south -> %{robot | pos: {x, y - 1}}
+      :east -> %{robot | pos: {x + 1, y}}
+      :west -> %{robot | pos: {x - 1, y}}
     end
   end
 
-  defp turn_left(%{dir: dir, pos: pos}) do
+  defp turn_left(%{dir: dir, pos: _pos}=robot) do
     case dir do
-      :north -> %{dir: :west, pos: pos}
-      :south -> %{dir: :east, pos: pos}
-      :east  -> %{dir: :north, pos: pos}
-      :west  -> %{dir: :south, pos: pos}
+      :north -> %{robot | dir: :west}
+      :south -> %{robot | dir: :east}
+      :east -> %{robot | dir: :north}
+      :west -> %{robot | dir: :south}
     end
   end
 
-  
-  defp turn_right(%{dir: dir, pos: pos}) do
+  defp turn_right(%{dir: dir, pos: _pos}=robot) do
     case dir do
-      :north -> %{dir: :east, pos: pos}
-      :south -> %{dir: :west, pos: pos}
-      :east  -> %{dir: :south, pos: pos}
-      :west  -> %{dir: :north, pos: pos}
+      :north -> %{robot | dir: :east}
+      :south -> %{robot | dir: :west}
+      :east -> %{robot | dir: :south}
+      :west -> %{robot | dir: :north}
     end
   end
-
-  
 
   @doc """
   Simulate the robot's movement given a string of instructions.
@@ -63,7 +70,7 @@ defmodule RobotSimulator do
   """
   @spec simulate(robot :: any, instructions :: String.t()) :: any
   def simulate(robot, instructions) do
-    instructions |> String.graphemes |> Enum.reduce(robot, &move_robot/2)
+    instructions |> String.graphemes() |> Enum.reduce(robot, &move_robot/2)
   end
 
   @doc """
@@ -72,15 +79,11 @@ defmodule RobotSimulator do
   Valid directions are: `:north`, `:east`, `:south`, `:west`
   """
   @spec direction(robot :: any) :: atom
-  def direction(robot) do
-    robot[:dir]
-  end
+  def direction(%{dir: dir}), do: dir
 
   @doc """
   Return the robot's position.
   """
   @spec position(robot :: any) :: {integer, integer}
-  def position(robot) do
-    robot[:pos]
-  end
+  def position(%{pos: pos}), do: pos
 end
