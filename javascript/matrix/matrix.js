@@ -5,7 +5,7 @@
 
 export class Matrix {
   constructor(input) {
-    this.matrix = input.split('\n').map(x => x.split(' ').map(y => Number(y)))
+    this.matrix = input.split('\n').map(x => x.split(' ').map(Number))
   }
 
   get rows() {
@@ -13,19 +13,16 @@ export class Matrix {
   }
 
   get columns() {
-    // Prepare result column matrix
-    let r = []
-    this.matrix[0].forEach(col => {
-      r.push([])
-    })
-
+    let resultMatrix = []
+    
     // Add transposed rows / cols to result
     this.matrix.forEach( (row, rowIdx) => {
       row.forEach( (el, elIdx) => {
-        r[elIdx][rowIdx] = el;
+        if(resultMatrix[elIdx]==undefined) resultMatrix.push([])
+        resultMatrix[elIdx][rowIdx] = el;
       })
     });
 
-    return r;
+    return resultMatrix;
   }
 }
