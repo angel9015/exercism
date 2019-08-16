@@ -20,10 +20,10 @@ export class Matrix {
     let resultMatrix = []
     
     // Add transposed rows / cols to result
-    rows.forEach( (row, rowIdx) => {
-      row.forEach( (el, elIdx) => {
-        if(resultMatrix[elIdx]==undefined) resultMatrix.push([])
-        resultMatrix[elIdx][rowIdx] = el;
+    rows[0].forEach( (col, colIdx) => {
+      if(resultMatrix[colIdx]==undefined) resultMatrix.push([])
+      rows.forEach( (row, rowIdx) => {
+        resultMatrix[colIdx][rowIdx] = row[colIdx];
       })
     });
 
