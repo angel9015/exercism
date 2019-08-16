@@ -21,7 +21,7 @@ export class Matrix {
     
     // Add transposed rows / cols to result
     rows[0].forEach( (col, colIdx) => {
-      if(resultMatrix[colIdx]==undefined) resultMatrix.push([])
+      resultMatrix.push([])
       rows.forEach( (row, rowIdx) => {
         resultMatrix[colIdx][rowIdx] = row[colIdx];
       })
