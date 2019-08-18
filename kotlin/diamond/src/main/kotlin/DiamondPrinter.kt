@@ -8,14 +8,14 @@ class DiamondPrinter {
         val outerSpaces = " ".repeat(c - it)
 
         // The A will be displayed only once so its a special case;
-        if(it == 'A') {
-            return outerSpaces + it + outerSpaces
+        return if(it == 'A') {
+             outerSpaces + it + outerSpaces
         } else {
             // And the amount of spaces between the letters will be
             // the total len - two times the outer len - 2 (for the letter)
             // Which is simplified to 2(it-A)-1
             val innerSpaces = " ".repeat(2*(it-'A')-1)
-            return outerSpaces + it + innerSpaces + it + outerSpaces
+            outerSpaces + it + innerSpaces + it + outerSpaces
         }
     }
 
