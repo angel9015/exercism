@@ -1,12 +1,17 @@
-object HandshakeCalculator {
-    fun calculateHandshake(n: Int): List<Signal> {
-        val r = mutableListOf<Signal>() 
-        if(n and 1!=0) r.add(Signal.WINK)
-        if(n and 2!=0) r.add(Signal.DOUBLE_BLINK)
-        if(n and 4!=0) r.add(Signal.CLOSE_YOUR_EYES)
-        if(n and 8!=0) r.add(Signal.JUMP)        
-        if(n and 16!=0) r.reverse()        
 
-        return r
+
+object HandshakeCalculator {
+    fun calculateHandshake(n: Int): List<Signal> = listOf(
+        Signal.WINK,
+        Signal.DOUBLE_BLINK,
+        Signal.CLOSE_YOUR_EYES,
+        Signal.JUMP,
+        null
+    ).foldIndexed(listOf<Signal>()) { idx, acc, it ->
+        if(n and ((Math.pow(2.0, 1.0*idx)).toInt()) !=0) {
+            if(it!=null) acc + it else acc.asReversed()
+        } else {
+            acc
+        }
     }
 }
