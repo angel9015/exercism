@@ -62,25 +62,19 @@ defmodule Tournament do
     }"
   end
 
-  defp tally_reducer(line, acc) do
-    split_result = String.split(line, ";")
-
-    case split_result do
-      [team1, team2, outcome] ->
-        case outcome do
-          "win" -> acc |> win(team1) |> lose(team2)
-          "loss" -> acc |> win(team2) |> lose(team1)
-          "draw" -> acc |> draw(team1) |> draw(team2)
-          _ -> acc
-        end
-
-      _ ->
-        acc
+  defp tally_reducer(line, acc), do: tally_reducer_line(String.split(line, ";"), acc)
+    
+  defp tally_reducer_line([team1, team2, outcome], acc) when outcome in ["win", "loss", "draw"] do
+    case outcome do
+      "win" -> acc |> win(team1) |> lose(team2)
+      "loss" -> acc |> win(team2) |> lose(team1)
+      "draw" -> acc |> draw(team1) |> draw(team2)
     end
   end
+  defp tally_reducer_line(_, acc), do: acc
 
   defp tt_inc(team_tally, key, val \\ 1) do
-    team_tally |> Map.update!(key, &(&1 + val))
+    team_tally |> Map.update(key, &(&1 + val))
   end
 
   defp win(acc, team) do
