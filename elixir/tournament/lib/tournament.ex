@@ -76,9 +76,8 @@ defmodule Tournament do
   defp tally_reducer_line(_, acc), do: acc
 
   defp merger(acc, team, result) do
-    acc
-    |> Map.merge(%{team => result}, fn _k, stats1, stats2 ->
-      stats1 |> Map.merge(stats2, fn _k, v1, v2 -> v1 + v2 end)
+    Map.merge(acc, %{team => result}, fn _k, stats1, stats2 ->
+      Map.merge(stats1, stats2, fn _k, v1, v2 -> v1 + v2 end)
     end)
   end
 end
