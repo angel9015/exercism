@@ -6,56 +6,56 @@ defmodule ListOps do
   # `++`, `--`, `hd`, `tl`, `in`, and `length`.
 
   @spec count(list) :: non_neg_integer
-  def count(l), do: count_t(l, 0)
+  def count(l), do: do_count(l, 0)
 
-  defp count_t([], c), do: c
-  defp count_t([_h | t], c), do: count_t(t, c + 1)
+  defp do_count([], c), do: c
+  defp do_count([_h | t], c), do: do_count(t, c + 1)
 
   @spec reverse(list) :: list
-  def reverse(l), do: reverse_t(l, [])
+  def reverse(l), do: do_reverse(l, [])
 
-  defp reverse_t([], acc), do: acc
-  defp reverse_t([h | t], acc), do: reverse_t(t, [h | acc])
+  defp do_reverse([], acc), do: acc
+  defp do_reverse([h | t], acc), do: do_reverse(t, [h | acc])
 
   @spec map(list, (any -> any)) :: list
-  def map(l, f), do: map_t(l, f, [])
+  def map(l, f), do: do_map(l, f, [])
 
-  defp map_t([], _f, acc), do: acc |> reverse
-  defp map_t([h | t], f, acc), do: map_t(t, f, [f.(h) | acc])
+  defp do_map([], _f, acc), do: reverse(acc)
+  defp do_map([h | t], f, acc), do: do_map(t, f, [f.(h) | acc])
 
   @spec filter(list, (any -> as_boolean(term))) :: list
-  def filter(l, f), do: filter_t(l, f, [])
-  defp filter_t([], _f, acc), do: acc |> reverse
+  def filter(l, f), do: do_filter(l, f, [])
 
-  defp filter_t([h | t], f, acc) do
+  defp do_filter([], _f, acc), do: reverse(acc)
+
+  defp do_filter([h | t], f, acc) do
     if f.(h) do
-      filter_t(t, f, [h | acc])
+      do_filter(t, f, [h | acc])
     else
-      filter_t(t, f, acc)
+      do_filter(t, f, acc)
     end
   end
 
   @type acc :: any
   @spec reduce(list, acc, (any, acc -> acc)) :: acc
   def reduce([], acc, _f), do: acc
-  def reduce([h|t], acc, f) do
+
+  def reduce([h | t], acc, f) do
     reduce(t, f.(h, acc), f)
   end
 
   @spec append(list, list) :: list
-  def append(a, l), do: append_t(reverse(a), l)
+  def append(a, l), do: do_append(reverse(a), l)
 
-  def append_t(a, []), do: reverse(a)
-  def append_t(a, [h|t]), do: append_t([h|a], t)
+  def do_append(a, []), do: reverse(a)
+  def do_append(a, [h | t]), do: do_append([h | a], t)
 
   @spec concat([[any]]) :: [any]
   def concat(ll) do
-    concat_t(ll, [])
+    do_concat(ll, [])
   end
 
-  def concat_t([], acc), do: acc |> reverse
-  def concat_t([[]|t], acc), do: concat_t(t, acc)
-  def concat_t([[h|t1]|t], acc), do: concat_t([t1|t], [h|acc])
-
-
+  def do_concat([], acc), do: reverse(acc)
+  def do_concat([[] | t], acc), do: do_concat(t, acc)
+  def do_concat([[h | t1] | t], acc), do: do_concat([t1 | t], [h | acc])
 end
