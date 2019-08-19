@@ -1,7 +1,7 @@
 defmodule Tournament do
   @header_line "Team                           | MP |  W |  D |  L |  P\n"
 
-  @team_initial_state_win %{
+  @team_data_win %{
     matches: 1,
     wins: 1,
     draws: 0,
@@ -9,7 +9,7 @@ defmodule Tournament do
     points: 3
   }
 
-  @team_initial_state_loss %{
+  @team_data_loss %{
     matches: 1,
     wins: 0,
     draws: 0,
@@ -17,7 +17,7 @@ defmodule Tournament do
     points: 0
   }
 
-  @team_initial_state_draw %{
+  @team_data_draw %{
     matches: 1,
     wins: 0,
     draws: 1,
@@ -63,40 +63,22 @@ defmodule Tournament do
   end
 
   defp tally_reducer(line, acc), do: tally_reducer_line(String.split(line, ";"), acc)
-    
-  defp tally_reducer_line([team1, team2, outcome], acc) when outcome in ["win", "loss", "draw"] do
-    case outcome do
-      "win" -> acc |> win(team1) |> lose(team2)
-      "loss" -> acc |> win(team2) |> lose(team1)
-      "draw" -> acc |> draw(team1) |> draw(team2)
-    end
-  end
+
+  defp tally_reducer_line([team1, team2, "win"], acc),
+    do: acc |> merger(team1, @team_data_win) |> merger(team2, @team_data_loss)
+
+  defp tally_reducer_line([team1, team2, "loss"], acc),
+    do: acc |> merger(team2, @team_data_win) |> merger(team1, @team_data_loss)
+
+  defp tally_reducer_line([team1, team2, "draw"], acc),
+    do: acc |> merger(team1, @team_data_draw) |> merger(team2, @team_data_draw)
+
   defp tally_reducer_line(_, acc), do: acc
 
-  defp tt_inc(team_tally, key, val \\ 1) do
-    team_tally |> Map.update!(key, &(&1 + val))
-  end
-
-  defp win(acc, team) do
+  defp merger(acc, team, result) do
     acc
-    |> Map.update(
-      team,
-      @team_initial_state_win,
-      &(&1 |> tt_inc(:matches) |> tt_inc(:wins) |> tt_inc(:points, 3))
-    )
-  end
-
-  defp lose(acc, team) do
-    acc
-    |> Map.update(team, @team_initial_state_loss, &(&1 |> tt_inc(:matches) |> tt_inc(:losses)))
-  end
-
-  defp draw(acc, team) do
-    acc
-    |> Map.update(
-      team,
-      @team_initial_state_draw,
-      &(&1 |> tt_inc(:matches) |> tt_inc(:draws) |> tt_inc(:points))
-    )
+    |> Map.merge(%{team => result}, fn _k, stats1, stats2 ->
+      stats1 |> Map.merge(stats2, fn _k, v1, v2 -> v1 + v2 end)
+    end)
   end
 end
