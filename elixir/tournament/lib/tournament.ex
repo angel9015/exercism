@@ -74,7 +74,7 @@ defmodule Tournament do
   defp tally_reducer_line(_, acc), do: acc
 
   defp tt_inc(team_tally, key, val \\ 1) do
-    team_tally |> Map.update(key, &(&1 + val))
+    team_tally |> Map.update!(key, &(&1 + val))
   end
 
   defp win(acc, team) do
