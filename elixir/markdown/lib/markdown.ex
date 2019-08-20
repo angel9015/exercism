@@ -40,8 +40,8 @@ defmodule Markdown do
   end
 
   defp enclose_with_header_tag({header_level, header_text}) do
+    # Use string interpolation instead of concatenation
     "<h#{header_level}>#{header_text}</h#{header_level}>" 
-    #"<h" <> hl <> ">" <> htl <> "</h" <> hl <> ">"
   end
 
   defp enclose_with_paragraph_tag(t) do
