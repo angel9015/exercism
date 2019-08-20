@@ -2,25 +2,27 @@
 
 
 main () {
-
+    out=""
     if (( $1 % 3 == 0 ))
     then
-        echo -n "Pling"
+        out="Pling"
     fi
 
     if (( $1 % 5 == 0 ))
     then
-        echo -n "Plang"
+        out=$out"Plang"
     fi
 
     if (( $1 % 7 == 0 ))
     then
-        echo -n "Plong"
+        out=$out"Plong"
     fi
 
-    if (( $1 % 3 != 0 && $1 % 5 != 0 && $1 % 7 != 0 ))
+    if [ -z $out ]
     then
         echo $1
+    else
+        echo $out
     fi
 }
 
