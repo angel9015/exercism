@@ -4,7 +4,7 @@
 (def dna->rna {\G \C \C \G \T \A \A \U})
 
 (defn to-rna [dna]
-  {:pre  [(every? #(contains? (set (keys dna->rna)) %1) dna)]}
+  {:pre  [(every? (set (keys dna->rna)) dna)]}
   (->> dna
        (map dna->rna)
        (str/join "")))
