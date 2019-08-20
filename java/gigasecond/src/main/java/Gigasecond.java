@@ -7,7 +7,7 @@ class Gigasecond {
     
     public final Duration GIGASECOND = Duration.ofSeconds(1_000_000_000);
     LocalDateTime time;
-
+    
     Gigasecond(LocalDate moment) {
         this(moment.atStartOfDay());
     }

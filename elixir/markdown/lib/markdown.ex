@@ -12,58 +12,39 @@ defmodule Markdown do
   """
   @spec parse(String.t()) :: String.t()
   def parse(text) do
-    # patch(Enum.join(Enum.map(String.split(m, "\n"), fn t -> process(t) end)))
-    # patch(Enum.join(Enum.map(String.split(m, "\n"), &process/1)))
     # Split to paragraphs using \n
     # Process each paragraph
     # Join them
     # And then pass them to patch
     # Use pipe operators
-    text |> String.split("\n") |> Enum.map(&process/1) |> Enum.join() |> patch
+    text |> String.split("\n") |> Enum.map(&process/1) |> Enum.join() |> patch_lists()
   end
 
-  # Procecss lists
-  defp process("* " <> rest), do: parse_list_md_level(rest)
   # Procecss headers
-  defp process("#" <> _rest = text), do: text |> parse_header_md_level() |> enclose_with_header_tag()
+  defp process("#" <> rest), do: create_header_md(rest, 1)
+  # Procecss lists
+  defp process("* " <> rest), do: rest |> String.split() |> create_list_md()
   # Process other paragraphs
-  defp process(text), do: text |> String.split() |> enclose_with_paragraph_tag()
+  defp process(text), do: text |> String.split() |> create_paragraph_md()
 
-  defp parse_header_md_level(hwt) do
-    [h | t] = String.split(hwt)
-    {to_string(String.length(h)), Enum.join(t, " ")}
+  # create_header recursively
+  defp create_header_md("#" <> rest, header_level), do: create_header_md(rest, header_level + 1)
+  defp create_header_md(" " <> header_text, header_level),
+    do: "<h#{header_level}>#{header_text}</h#{header_level}>"
+
+  defp create_list_md(words), do: "<li>#{join_words_with_tags(words)}</li>"
+  defp create_paragraph_md(words), do: "<p>#{join_words_with_tags(words)}</p>"
+
+  defp join_words_with_tags(words) do
+    words |> Enum.map(&replace_md_with_tag/1) |> Enum.join(" ")
   end
 
-  defp parse_list_md_level(l) do
-    t = String.split(String.trim_leading(l, "* "))
-    "<li>" <> join_words_with_tags(t) <> "</li>"
-  end
+  defp replace_md_with_tag("__" <> word), do: "<strong>#{word |> replace_md_with_tag()}"
+  defp replace_md_with_tag("_" <> word), do: "<em>#{word |> replace_suffix_md()}"
+  defp replace_md_with_tag(word), do: word |> replace_suffix_md()
 
-  defp enclose_with_header_tag({header_level, header_text}) do
-    # Use string interpolation instead of concatenation
-    "<h#{header_level}>#{header_text}</h#{header_level}>" 
-  end
-
-  defp enclose_with_paragraph_tag(t) do
-    "<p>#{join_words_with_tags(t)}</p>"
-  end
-
-  defp join_words_with_tags(t) do
-    Enum.join(Enum.map(t, fn w -> replace_md_with_tag(w) end), " ")
-  end
-
-  defp replace_md_with_tag(w) do
-    replace_suffix_md(replace_prefix_md(w))
-  end
-
-  defp replace_prefix_md(w) do
-    cond do
-      w =~ ~r/^#{"__"}{1}/ -> String.replace(w, ~r/^#{"__"}{1}/, "<strong>", global: false)
-      w =~ ~r/^[#{"_"}{1}][^#{"_"}+]/ -> String.replace(w, ~r/_/, "<em>", global: false)
-      true -> w
-    end
-  end
-
+  # I don't know how can I replace this :(
+  # Guards nor matching are available to strings
   defp replace_suffix_md(w) do
     cond do
       w =~ ~r/#{"__"}{1}$/ -> String.replace(w, ~r/#{"__"}{1}$/, "</strong>")
@@ -72,10 +53,10 @@ defmodule Markdown do
     end
   end
 
-  defp patch(str) do
-    # Replace <li> with <ul><li> and </li> with </li></ul> for each paragraph
+  defp patch_lists(text) do
+    # Replace <li> with <ul><li> and </li> with </li></ul> for each list
     # Use pipe operators
-    str
+    text
     |> String.replace("<li>", "<ul><li>", global: false)
     |> String.replace_suffix("</li>", "</li></ul>")
   end
