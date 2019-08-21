@@ -66,4 +66,21 @@ defmodule MarkdownTest do
 
     assert Markdown.parse(input) == expected
   end
+
+  test "consecutive strong and em tags" do
+    input = "__Bold Item___Italic Item_"
+
+    expected = "<p><strong>Bold Item</strong><em>Italic Item</em></p>"
+
+    assert Markdown.parse(input) == expected
+  end
+
+  test "multiple ul tags" do
+    input = "* Item 1\n* Item 2\nrandom string\n* Item 3\n* Item 4"
+
+    expected =
+      "<ul><li>Item 1</li><li>Item 2</li></ul><p>random string</p><ul><li>Item 3</li><li>Item 4</li></ul>"
+
+    assert Markdown.parse(input) == expected
+  end
 end

@@ -55,9 +55,10 @@ defmodule Markdown do
 
   defp patch_lists(text) do
     # Replace <li> with <ul><li> and </li> with </li></ul> for each list
+    # Only replace for start - end of list (i.e don't replace </li><li>)
     # Use pipe operators
     text
-    |> String.replace("<li>", "<ul><li>", global: false)
-    |> String.replace_suffix("</li>", "</li></ul>")
+    |> String.replace(~r/(?<!<\/li>)<li>/, "\\1<ul><li>")
+    |> String.replace(~r/<\/li>(?!<li>)/, "</li></ul>\\1")
   end
 end
