@@ -10,15 +10,15 @@ main () {
 
     if (( $1 % 5 == 0 ))
     then
-        out=$out"Plang"
+        out+="Plang"
     fi
 
     if (( $1 % 7 == 0 ))
     then
-        out=$out"Plong"
+        out+="Plong"
     fi
 
-    if [ -z $out ]
+    if [[ -z $out ]]
     then
         echo $1
     else
