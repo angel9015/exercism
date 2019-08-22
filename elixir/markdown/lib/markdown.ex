@@ -23,34 +23,25 @@ defmodule Markdown do
   # Procecss headers
   defp process("#" <> rest), do: create_header_md(rest, 1)
   # Procecss lists
-  defp process("* " <> rest), do: rest |> String.split() |> create_list_md()
+  defp process("* " <> rest), do: rest |> create_list_md()
   # Process other paragraphs
-  defp process(text), do: text |> String.split() |> create_paragraph_md()
+  defp process(text), do: text |> create_paragraph_md()
 
   # create_header recursively
   defp create_header_md("#" <> rest, header_level), do: create_header_md(rest, header_level + 1)
+
   defp create_header_md(" " <> header_text, header_level),
     do: "<h#{header_level}>#{header_text}</h#{header_level}>"
 
-  defp create_list_md(words), do: "<li>#{join_words_with_tags(words)}</li>"
-  defp create_paragraph_md(words), do: "<p>#{join_words_with_tags(words)}</p>"
+  defp create_list_md(words), do: "<li>#{fix_tags(words)}</li>"
+  defp create_paragraph_md(words), do: "<p>#{fix_tags(words)}</p>"
 
-  defp join_words_with_tags(words) do
-    words |> Enum.map(&replace_md_with_tag/1) |> Enum.join(" ")
-  end
-
-  defp replace_md_with_tag("__" <> word), do: "<strong>#{word |> replace_md_with_tag()}"
-  defp replace_md_with_tag("_" <> word), do: "<em>#{word |> replace_suffix_md()}"
-  defp replace_md_with_tag(word), do: word |> replace_suffix_md()
-
-  # I don't know how can I replace this :(
-  # Guards nor matching are available to strings
-  defp replace_suffix_md(w) do
-    cond do
-      w =~ ~r/#{"__"}{1}$/ -> String.replace(w, ~r/#{"__"}{1}$/, "</strong>")
-      w =~ ~r/[^#{"_"}{1}]/ -> String.replace(w, ~r/_/, "</em>")
-      true -> w
-    end
+  defp fix_tags(txt) do
+    # Replace __z__ with <strong>z</strong> and the same for em _z_
+    # Notice that it uses non-greedy matching.
+    txt
+    |> String.replace(~r/__([^_]+?)__/, "<strong>\\1</strong>")
+    |> String.replace(~r/_([^_]+?)_/, "<em>\\1</em>")
   end
 
   defp patch_lists(text) do
