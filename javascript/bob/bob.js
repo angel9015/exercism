@@ -1,7 +1,7 @@
 
 export const hey = (message) => {
   let isQuestion = s => s.slice(-1) === "?"
-  let isCaps = s => s.toUpperCase() === s && s.toLowerCase() != s
+  let isCaps = s => s.toUpperCase() === s && s.toLowerCase() !== s
   let isEmpty = s => s === ""
 
   message = message.trim()
