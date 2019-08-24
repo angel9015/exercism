@@ -28,6 +28,7 @@ defmodule Zipper do
   def to_tree(value: value, left: left, right: right, trail: :top) do
     %BinTree{value: value, left: left, right: right}
   end
+
   def to_tree(z), do: to_tree(up(z))
 
   @doc """
@@ -41,6 +42,7 @@ defmodule Zipper do
   """
   @spec left(Zipper.t()) :: Zipper.t() | nil
   def left(value: _, left: nil, right: _, trail: _), do: nil
+
   def left(
         value: value,
         left: %BinTree{
@@ -69,6 +71,7 @@ defmodule Zipper do
   """
   @spec right(Zipper.t()) :: Zipper.t() | nil
   def right(value: _, left: _, right: nil, trail: _), do: nil
+
   def right(
         value: value,
         left: left,
@@ -97,19 +100,51 @@ defmodule Zipper do
   """
   @spec up(Zipper.t()) :: Zipper.t() | nil
   def up(value: _, left: _, right: _, trail: :top), do: nil
-  def up(value: value, left: left, right: right, trail: [
-    :left, tval, tbranch, ttrail
-  ]) do
-    [value: tval, left: %BinTree{
-      value: value, left: left, right: right
-    }, right: tbranch, trail: ttrail ]
+
+  def up(
+        value: value,
+        left: left,
+        right: right,
+        trail: [
+          :left,
+          tval,
+          tbranch,
+          ttrail
+        ]
+      ) do
+    [
+      value: tval,
+      left: %BinTree{
+        value: value,
+        left: left,
+        right: right
+      },
+      right: tbranch,
+      trail: ttrail
+    ]
   end
-  def up(value: value, left: left, right: right, trail: [
-    :right, tval, tbranch, ttrail
-  ]) do
-    [value: tval, left: tbranch, right: %BinTree {
-      value: value, left: left, right: right
-    }, trail: ttrail]
+
+  def up(
+        value: value,
+        left: left,
+        right: right,
+        trail: [
+          :right,
+          tval,
+          tbranch,
+          ttrail
+        ]
+      ) do
+    [
+      value: tval,
+      left: tbranch,
+      right: %BinTree{
+        value: value,
+        left: left,
+        right: right
+      },
+      trail: ttrail
+    ]
   end
 
   @doc """
@@ -117,7 +152,7 @@ defmodule Zipper do
   """
   @spec set_value(Zipper.t(), any) :: Zipper.t()
   def set_value(zipper, value) do
-    Keyword.replace!(zipper, :value, value)
+    Keyword.update!(zipper, :value, fn _ -> value end)
   end
 
   @doc """
@@ -125,7 +160,7 @@ defmodule Zipper do
   """
   @spec set_left(Zipper.t(), BinTree.t() | nil) :: Zipper.t()
   def set_left(zipper, left) do
-    Keyword.replace!(zipper, :left, left)
+    Keyword.update!(zipper, :left, fn _ -> left end)
   end
 
   @doc """
@@ -133,6 +168,6 @@ defmodule Zipper do
   """
   @spec set_right(Zipper.t(), BinTree.t() | nil) :: Zipper.t()
   def set_right(zipper, right) do
-    Keyword.replace!(zipper, :right, right)
+    Keyword.update!(zipper, :right, fn _ -> right end)
   end
 end
