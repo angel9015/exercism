@@ -8,9 +8,11 @@ defmodule BinTree do
   """
 
   @type t :: %BinTree{value: any, left: t() | nil, right: t() | nil}
+  @type trail :: { :left, any, BinTree.t, trail() } | { :right, any, BinTree.t, trail() } | :top
 
   defstruct [:value, :left, :right]
 end
+
 
 defimpl Inspect, for: BinTree do
   import Inspect.Algebra
