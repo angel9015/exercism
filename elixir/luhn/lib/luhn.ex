@@ -1,4 +1,6 @@
 defmodule Luhn do
+  require Integer
+
   @doc """
   Checks if the given number is valid via the luhn formula
   """
@@ -26,17 +28,16 @@ defmodule Luhn do
     |> Enum.reverse()
     |> Enum.with_index()
     # Then sum the digits either as they are or using the luhn_double_digit depeding on their idx
-    |> Enum.reduce(0, fn {d, idx}, acc ->
-      acc + if rem(idx, 2) == 0, do: d, else: luhn_double_digit(d)
-    end)
+    |> Enum.reduce(0, &sum_reducer/2)
     # And finally check the mod 10 and return true if it is 0
     |> rem(10) == 0
   end
 
-  defp luhn_double_digit(d) do
-    # This will return the 2*digit as it is if it is < 9 or it will the sum of the digits if it is >= 10
-    # i.e 18 = 1+8 = 9
-    d2 = d * 2
-    if d2 > 9, do: 1 + (d2 - 10), else: d2
-  end
+  defp sum_reducer({d, idx}, acc) when Integer.is_even(idx), do: acc + d
+  defp sum_reducer({d, _idx}, acc), do: acc + luhn_double_digit(d)
+
+  # This will return the 2*digit as it is if it is < 9 or it will the sum of the digits if it is >= 10
+  # i.e 18 = 1+8 = 9
+  defp luhn_double_digit(d) when d < 5, do: d * 2
+  defp luhn_double_digit(d), do: d * 2 - 9
 end
