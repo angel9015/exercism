@@ -23,13 +23,13 @@ defmodule Diamond do
   end
 
   defp create_line(curr_letter, last_letter) do
-    outer_spaces = " " |> String.duplicate(last_letter - curr_letter)
+    do_create_line(curr_letter, " " |> String.duplicate(last_letter - curr_letter))
+  end
 
-    if(curr_letter == ?A) do
-      outer_spaces <> "A" <> outer_spaces
-    else
-      inner_spaces = " " |> String.duplicate(2 * (curr_letter - ?A) - 1)
-      outer_spaces <> c_to_s(curr_letter) <> inner_spaces <> c_to_s(curr_letter) <> outer_spaces
-    end
+  defp do_create_line(?A, outer_spaces), do: outer_spaces <> "A" <> outer_spaces
+
+  defp do_create_line(curr_letter, outer_spaces) do
+    inner_spaces = " " |> String.duplicate(2 * (curr_letter - ?A) - 1)
+    outer_spaces <> c_to_s(curr_letter) <> inner_spaces <> c_to_s(curr_letter) <> outer_spaces
   end
 end
