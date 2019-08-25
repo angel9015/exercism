@@ -1,7 +1,5 @@
  object Flattener {
-    fun flatten(list: List<Any?>): List<Any?> = list.fold(listOf()) {
-        acc, el -> reducer(acc, el)
-    }
+    fun flatten(list: List<Any?>): List<Any?> = list.fold(listOf(), this::reducer)
 
     private fun reducer(acc: List<Any?>, el: Any?): List<Any?> = if(el == null) {
         acc
