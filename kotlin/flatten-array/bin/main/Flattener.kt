@@ -4,9 +4,7 @@
     private fun reducer(acc: List<Any?>, el: Any?): List<Any?> = if(el == null) {
         acc
     } else if (el is List<*>) {
-        el.fold(acc) {
-            internalAcc, internalEl -> reducer(internalAcc, internalEl)
-        }
+        el.fold(acc, this::reducer)
     } else {
         acc + el
     }
