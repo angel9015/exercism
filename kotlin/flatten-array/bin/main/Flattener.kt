@@ -3,7 +3,7 @@
         acc, el -> reducer(acc, el)
     }
 
-    fun reducer(acc: List<Any?>, el: Any?): List<Any?> = if(el == null) {
+    private fun reducer(acc: List<Any?>, el: Any?): List<Any?> = if(el == null) {
         acc
     } else if (el is List<*>) {
         el.fold(acc) {
