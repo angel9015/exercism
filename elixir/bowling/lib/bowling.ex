@@ -8,7 +8,7 @@ defmodule Bowling do
   @spec start() :: any
   def start do
     # with {:ok, pid} <- Agent.start_link(fn -> [] end), do: pid
-    {:ok, pid} = Agent.start_link(fn -> [%{frame: 1, roll1: 0, roll2: 0}] end)
+    {:ok, pid} = Agent.start_link(fn -> [[frame: 1]] end)
     pid
   end
 
@@ -29,7 +29,7 @@ defmodule Bowling do
     game
   end
 
-  defp set_state(%{frame: frame, roll1: roll1, roll2: roll2} = state, roll) do
+  defp set_state([frame: frame, roll1: roll1, roll2: roll2] = state, roll) do
     state
   end
 
