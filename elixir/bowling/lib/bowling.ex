@@ -26,6 +26,9 @@ defmodule Bowling do
 
   def roll([{r1} | rest], roll) when length(rest) == 9, do: [{r1, roll} | rest]
 
+  def roll([{10, r2} | rest], roll) when length(rest) == 9 and r2 != 10 and r2 + roll > 10,
+    do: {:error, "Pin count exceeds pins on the lane"}
+
   def roll([{10, r2} | rest], 10) when length(rest) == 9 and r2 != 10,
     do: {:error, "Pin count exceeds pins on the lane"}
 
