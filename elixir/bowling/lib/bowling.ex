@@ -54,7 +54,11 @@ defmodule Bowling do
 
   @spec score(any) :: integer | String.t()
   def score(game) do
-    # Agent.get(game, & &1) |> Enum.reduce(&(&1 + &2))
-    0
+    Agent.get(game, & &1) |> Enum.reverse() |> Enum.reduce(%{score: 0, p: nil, pp: nil}, &(&1 + &2)) |> Map.get(:score)
   end
+
+  defp score_reducer([frame: _frame, roll1: 10], %{score: score, p: p, pp: pp}), do: %{score: 10+score, p: :strike, pp: p}
+  defp score_reducer([frame: _frame, roll1: roll1, roll2: roll1], %{score: score, p: p, pp: pp}) when roll+roll2=10, do: %{score: 10+score, p: :spare, pp: p}
+  defp score_reducer([frame: _frame, roll1: roll1, roll2: roll1], %{score: score, p: p, pp: pp}), do: %{score: roll1+roll2+score, p: nil, pp: p}
+  #defp score_reducer([frame: _frame, roll1: 10], %{score: score, p: p, pp: pp}), do: %{score: 10+score, p: :strike, pp: p}
 end
