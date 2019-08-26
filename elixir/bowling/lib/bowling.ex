@@ -19,7 +19,8 @@ defmodule Bowling do
   """
 
   @spec roll(any, integer) :: any | String.t()
-  def roll(_game, roll) when roll > 10 or roll < 0, do: "Error"
+  def roll(_game, roll) when roll > 10, do: "Pin count exceeds pins on the lane"
+  def roll(_game, roll) when roll < 0, do: "Negative roll is invalid"
 
   # def roll([%{frame: n, roll_number: 1} | _rest] = state, 10),
   #  do: [%{frame: n + 1, roll_number: 1} | state]
@@ -29,7 +30,20 @@ defmodule Bowling do
     game
   end
 
-  defp set_state([frame: frame, roll1: roll1, roll2: roll2] = state, roll) do
+  # 1st roll, strike
+  defp set_state([[frame: frame] | rest], roll) when roll == 10,
+    do: [[frame: frame + 1] | [[frame: frame, roll1: 10] | rest]]
+
+  # 1st roll, no strike
+  defp set_state([[frame: frame] | rest], roll), do: [[frame: frame, roll1: roll] | rest]
+  # 2nd roll, error
+  defp set_state([[frame: frame, roll1: roll1] | rest], roll) when roll1 + roll > 10,
+    do: "Pin count exceeds pins on the lane"
+
+  defp set_state([[frame: frame, roll1: roll1] | rest], roll),
+    do: [[frame: frame + 1] | [[frame: frame, roll1: roll1, roll2: roll] | rest]]
+
+  defp set_state([[frame: frame, roll1: roll1, roll2: roll2] | rest] = state, roll) do
     state
   end
 
