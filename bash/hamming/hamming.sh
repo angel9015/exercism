@@ -22,18 +22,18 @@ main () {
         return 1
     fi
 
-    if [[ ${#1} != ${#2} ]]; then
+    if (( ${#1} != ${#2} )); then
         echo "left and right strands must be of equal length"
         return 1
     fi
 
     idx=0
     cnt=0
-    until [[ $idx -gt ${#1} ]]; do
+    until (( $idx >= ${#1} )); do
         if [[ ${1:$idx:1} != ${2:$idx:1} ]]; then
             ((++cnt))
         fi
-        let idx+=1
+        ((idx+=1))
     done
     echo $cnt
 }
