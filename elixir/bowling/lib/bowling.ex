@@ -1,5 +1,6 @@
 defmodule Bowling do
-  require Integer
+  @pin_count 10
+  @total_frames 10
 
   @doc """
     Creates a new game of bowling that can be used to store the results of
@@ -17,40 +18,47 @@ defmodule Bowling do
   """
 
   @spec roll(any, integer) :: any | String.t()
-  def roll(_game, roll) when roll > 10, do: {:error, "Pin count exceeds pins on the lane"}
+  def roll(_game, roll) when roll > @pin_count, do: {:error, "Pin count exceeds pins on the lane"}
   def roll(_game, roll) when roll < 0, do: {:error, "Negative roll is invalid"}
 
-  def roll([{} | rest], 10) when length(rest) == 9, do: [{10} | rest]
-  def roll([{} | rest], 10), do: [{}, {10} | rest]
+  def roll([{} | rest] = game, @pin_count) when length(game) == @total_frames,
+    do: [{@pin_count} | rest]
+
+  def roll([{} | rest], @pin_count), do: [{}, {@pin_count} | rest]
   def roll([{} | rest], roll), do: [{roll} | rest]
 
-  def roll([{r1} | rest], roll) when length(rest) == 9, do: [{r1, roll} | rest]
+  def roll([{r1} | rest] = game, roll) when length(game) == @total_frames, do: [{r1, roll} | rest]
 
-  def roll([{10, r2} | rest], roll) when length(rest) == 9 and r2 != 10 and r2 + roll > 10,
-    do: {:error, "Pin count exceeds pins on the lane"}
+  def roll([{@pin_count, r2} | _rest] = game, roll)
+      when length(game) == @total_frames and r2 != @pin_count and r2 + roll > @pin_count,
+      do: {:error, "Pin count exceeds pins on the lane"}
 
-  def roll([{10, r2} | rest], 10) when length(rest) == 9 and r2 != 10,
-    do: {:error, "Pin count exceeds pins on the lane"}
+  def roll([{@pin_count, r2} | _rest] = game, @pin_count)
+      when length(game) == @total_frames and r2 != @pin_count,
+      do: {:error, "Pin count exceeds pins on the lane"}
 
-  def roll([{r1, r2} | rest], _roll) when length(rest) == 9 and r1 + r2 < 10,
-    do: {:error, "Cannot roll after game is over"}
+  def roll([{r1, r2} | _rest] = game, _roll)
+      when length(game) == @total_frames and r1 + r2 < @pin_count,
+      do: {:error, "Cannot roll after game is over"}
 
-  def roll([{r1, r2} | rest], roll) when length(rest) == 9, do: [{r1, r2, roll} | rest]
+  def roll([{r1, r2} | rest] = game, roll) when length(game) == @total_frames,
+    do: [{r1, r2, roll} | rest]
 
-  def roll([{r1} | _rest], roll) when r1 + roll > 10,
+  def roll([{r1} | _rest], roll) when r1 + roll > @pin_count,
     do: {:error, "Pin count exceeds pins on the lane"}
 
   def roll([{r1} | rest], roll), do: [{}, {r1, roll} | rest]
 
   @spec score(any) :: integer | String.t()
-  def score(game) when length(game) < 10,
+  def score(game) when length(game) < @total_frames,
     do: {:error, "Score cannot be taken until the end of the game"}
 
-  def score([{r1} | rest]) when length(rest) == 9 and r1 == 10,
+  def score([{r1} | _rest] = game) when length(game) == @total_frames and r1 == @pin_count,
     do: {:error, "Score cannot be taken until the end of the game"}
 
-  def score([{r1, r2} | rest]) when length(rest) == 9 and r1 + r2 >= 10,
-    do: {:error, "Score cannot be taken until the end of the game"}
+  def score([{r1, r2} | _rest] = game)
+      when length(game) == @total_frames and r1 + r2 >= @pin_count,
+      do: {:error, "Score cannot be taken until the end of the game"}
 
   def score(game) do
     game |> Enum.reverse() |> do_score(0)
@@ -58,9 +66,9 @@ defmodule Bowling do
 
   defp do_score([], score), do: score
   defp do_score([{r1, r2, r3}], score), do: score + r1 + r2 + r3
-  defp do_score([{10} | rest], score), do: do_score(rest, score + 10 + strike(rest))
+  defp do_score([{@pin_count} | rest], score), do: do_score(rest, score + 10 + strike(rest))
 
-  defp do_score([{r1, r2} | rest], score) when r1 + r2 == 10,
+  defp do_score([{r1, r2} | rest], score) when r1 + r2 == @pin_count,
     do: do_score(rest, score + 10 + spare(rest))
 
   defp do_score([{r1, r2} | rest], score), do: do_score(rest, score + r1 + r2)
