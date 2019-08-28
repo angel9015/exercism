@@ -1,22 +1,26 @@
 #include "hamming.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 int compute(const char *lhs, const char *rhs)
 {
     int acc = 0;
-    int i;
+    char *lp = (char *)lhs;
+    char *rp = (char *)rhs;
 
     if (lhs == NULL || rhs == NULL)
         return -1;
 
-    if (strlen(lhs) != strlen(rhs))
-        return -1;
-
-    for (i = 0; *(i + lhs) != 0; i++)
+    while (*lp != 0 || *rp != 0)
     {
-        if (*(lhs + i) != *(rhs + i))
+        if ((*lp == 0 && *rp != 0) || (*lp != 0 && *rp == 0))
+            return -1;
+        if (*lp != *rp)
             acc++;
+
+        lp++;
+        rp++;
     }
     return acc;
 }
