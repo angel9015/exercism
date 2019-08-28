@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.html.eex": "html",
+        "*.eex": "HTML (Eex)",
+        "stdlib.h": "c"
+    }
+}
