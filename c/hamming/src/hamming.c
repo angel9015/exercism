@@ -6,21 +6,16 @@
 int compute(const char *lhs, const char *rhs)
 {
     int acc = 0;
-    char *lp = (char *)lhs;
-    char *rp = (char *)rhs;
 
     if (lhs == NULL || rhs == NULL)
         return -1;
 
-    while (*lp != 0 || *rp != 0)
+    while (*lhs != 0 || *rhs != 0)
     {
-        if ((*lp == 0 && *rp != 0) || (*lp != 0 && *rp == 0))
+        if ((*lhs == 0 && *rhs != 0) || (*lhs != 0 && *rhs == 0))
             return -1;
-        if (*lp != *rp)
+        if (*lhs++ != *rhs++)
             acc++;
-
-        lp++;
-        rp++;
     }
     return acc;
 }
