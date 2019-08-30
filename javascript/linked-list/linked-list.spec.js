@@ -8,7 +8,7 @@ describe('LinkedList', () => {
     expect(list.pop()).toBe(20);
     expect(list.pop()).toBe(10);
   });
-  xtest('extract elements from the beginning of the list with shift', () => {
+  test('extract elements from the beginning of the list with shift', () => {
     const list = new LinkedList();
     list.push(10);
     list.push(20);

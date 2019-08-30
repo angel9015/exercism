@@ -1,16 +1,26 @@
 
 export class LinkedList {
-  constructor(el) {
-    this._top = new Node(el, null, null)
+  constructor() {
+    this._top = null
   }
   push(el) {
-    let nn = new Node(el, this._top, null)
-    this._top.right = nn
+    if(this._top == null) {
+      this._top = new Node(el, null, null)  
+      
+    } else {
+      let nn = new Node(el, this._top, null)
+      this._top.right = nn
+    }
   }
 
   pop() {
-    let r = this._top.right;
-    while(r!=null) {
+    if(this._top.right == null) {
+      let v = this._top.val
+      this._top = null
+      return v
+    }
+    let r = this._top;
+    while(r.right!=null) {
       r = r.right
     }
     let v = r.val
@@ -19,7 +29,15 @@ export class LinkedList {
   }
 
   shift() {
-    throw new Error("Remove this statement and implement this function");
+    let v = this._top.val;
+    if(this._top.right) {
+      this._top.right.left = null
+      this._top = this._top.right
+    } else {
+      this._top = null;
+    }
+    
+    return v
   }
 
   unshift() {
