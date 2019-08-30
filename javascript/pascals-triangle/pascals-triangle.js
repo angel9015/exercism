@@ -1,3 +1,5 @@
+let sum = ([a, b]) => a + b
+
 export class Triangle {
   constructor(number) {
     this.number = number;
@@ -23,11 +25,14 @@ export class Triangle {
   }
 
   createRow(index) {
-    this._rows.push([1])
-    // Calculate the intermediate numbers by taking the sum of the corresponding vals of the previous row
-    for (var j = 1; j < index; j++) {
-      this._rows[index][j] = this._rows[index - 1][j - 1] + this._rows[index - 1][j]
-    }
-    this._rows[j].push(1)
+    this._rows[index] = this.leftRightPairs(index).map(sum)    
+  }
+
+  previousRow(index) {
+    return [...this._rows[index-1], 0]
+  }
+
+  leftRightPairs(index) {
+    return this.previousRow(index).map((val, idx, arr) => [arr[idx-1] || 0, arr[idx]])
   }
 }
