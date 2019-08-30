@@ -1,63 +1,109 @@
+class Node {
+  constructor(val, prev, next) {
+    this.val = val;
+    this.prev = prev;
+    this.next = next;
+  }
+}
 
 export class LinkedList {
   constructor() {
-    this._top = null
+    this.first = null
+    this.last = null
   }
+
   push(el) {
-    if(this._top == null) {
-      this._top = new Node(el, null, null)  
-      
+    if (this.first == null) {
+      // Empty list
+      this.first = new Node(el, null, null)
+      this.last = this.first
     } else {
-      let nn = new Node(el, this._top, null)
-      this._top.right = nn
+      // List with elements
+      let nn = new Node(el, this.last, null)
+      this.last.next = nn
+      this.last = nn
     }
   }
 
   pop() {
-    if(this._top.right == null) {
-      let v = this._top.val
-      this._top = null
+    let v = this.last.val
+    if (this.last == this.first) {
+      // Only 1 element in list
+      this.first = this.last = null
       return v
     }
-    let r = this._top;
-    while(r.right!=null) {
-      r = r.right
-    }
-    let v = r.val
-    r.left.right = r.right
+    this.last = this.last.prev
+    this.last.next = null
     return v
   }
 
   shift() {
-    let v = this._top.val;
-    if(this._top.right) {
-      this._top.right.left = null
-      this._top = this._top.right
-    } else {
-      this._top = null;
+    let v = this.first.val
+    if (this.last == this.first) {
+      // Only 1 element in list
+      this.first = this.last = null
+      return v
     }
-    
+    this.first = this.first.next
+    this.first.prev = null
     return v
   }
 
-  unshift() {
-    throw new Error("Remove this statement and implement this function");
+  unshift(el) {
+    if (this.first == null) {
+      // Empty list
+      this.first = new Node(el, null, null)
+      this.last = this.first
+    } else {
+      let nn = new Node(el, null, this.first)
+      this.first.prev = nn
+      this.first = nn
+    }
   }
 
-  delete() {
-    throw new Error("Remove this statement and implement this function");
+  delete(v) {
+    if (this.first.val == v && this.first == this.last) {
+      // 1 Element
+      this.first = null;
+      this.last = null
+      return
+    }
+    if (this.first.next == this.last) {
+      // 2 Elements
+      if (this.first.val == v) {
+        this.last.prev = null;
+        this.first = this.last;
+      } else if (this.last.val == v) {
+        this.first.next = null;
+        this.last = this.first;
+      }
+      return
+    }
+
+    // N elements
+    let c = this.first;
+    while (c.next != null) {
+
+      if (c.val == v) {
+        c.next.prev = c.prev
+        c.prev.next = c.next
+        break
+      }
+      c = c.next
+    }
+
   }
 
   count() {
-    throw new Error("Remove this statement and implement this function");
+    if (this.first == null) return 0;
+    let c = this.first;
+    let cnt = 1;
+    while (c != this.last) {
+      cnt += 1;
+      c = c.next
+    }
+    return cnt
   }
 }
 
 
-class Node {
-  constructor(val, left, right) {
-    this.val = val;
-    this.left = left;
-    this.right = right;
-  }
-}

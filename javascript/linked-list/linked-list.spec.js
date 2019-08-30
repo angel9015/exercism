@@ -1,6 +1,65 @@
 import { LinkedList } from './linked-list';
 
 describe('LinkedList', () => {
+  test('push', () => {
+
+    const list = new LinkedList();
+    expect(list.first).toBe(null)
+    expect(list.last).toBe(null)
+    list.push(10);
+    expect(list.first).toBe(list.last)
+    expect(list.first.val).toBe(10)
+    expect(list.first.next).toBe(null)
+    expect(list.first.prev).toBe(null)
+    expect(list.last.prev).toBe(null)
+    expect(list.last.next).toBe(null)
+    list.push(20);
+
+    expect(list.first.next).toBe(list.last)
+    expect(list.first.val).toBe(10)
+    expect(list.last.val).toBe(20)
+    expect(list.first.next).toBe(list.last)
+    expect(list.last.prev).toBe(list.first)
+    expect(list.last.next).toBe(null)
+    expect(list.first.prev).toBe(null)
+
+    list.push(30);
+
+    expect(list.first.next.next).toBe(list.last)
+    expect(list.first.val).toBe(10)
+    expect(list.first.next.val).toBe(20)
+    expect(list.last.prev.val).toBe(20)
+    expect(list.last.val).toBe(30)
+    expect(list.first.next.next).toBe(list.last)
+    expect(list.last.prev.prev).toBe(list.first)
+    expect(list.last.next).toBe(null)
+    expect(list.first.prev).toBe(null)
+
+
+    expect(list.pop()).toBe(30);
+
+
+    expect(list.first.next).toBe(list.last)
+    expect(list.first.val).toBe(10)
+    expect(list.last.val).toBe(20)
+    expect(list.first.next).toBe(list.last)
+    expect(list.last.prev).toBe(list.first)
+    expect(list.last.next).toBe(null)
+    expect(list.first.prev).toBe(null)
+
+    expect(list.pop()).toBe(20);
+    expect(list.first).toBe(list.last)
+    expect(list.first.val).toBe(10)
+    expect(list.first.next).toBe(null)
+    expect(list.first.prev).toBe(null)
+    expect(list.last.prev).toBe(null)
+    expect(list.last.next).toBe(null)
+
+    expect(list.pop()).toBe(10);
+    expect(list.first).toBe(null)
+    expect(list.last).toBe(null)
+  });
+
   test('add/extract elements to the end of the list with push/pop', () => {
     const list = new LinkedList();
     list.push(10);
@@ -15,21 +74,21 @@ describe('LinkedList', () => {
     expect(list.shift()).toBe(10);
     expect(list.shift()).toBe(20);
   });
-  xtest('add/extract elements from the beginning of the list with unshift/shift', () => {
+  test('add/extract elements from the beginning of the list with unshift/shift', () => {
     const list = new LinkedList();
     list.unshift(10);
     list.unshift(20);
     expect(list.shift()).toBe(20);
     expect(list.shift()).toBe(10);
   });
-  xtest('unshift/pop', () => {
+  test('unshift/pop', () => {
     const list = new LinkedList();
     list.unshift(10);
     list.unshift(20);
     expect(list.pop()).toBe(10);
     expect(list.pop()).toBe(20);
   });
-  xtest('example', () => {
+  test('example', () => {
     const list = new LinkedList();
     list.push(10);
     list.push(20);
@@ -42,7 +101,7 @@ describe('LinkedList', () => {
     expect(list.pop()).toBe(50);
     expect(list.shift()).toBe(30);
   });
-  xtest('can count its elements', () => {
+  test('can count its elements', () => {
     const list = new LinkedList();
     expect(list.count()).toBe(0);
     list.push(10);
@@ -50,7 +109,7 @@ describe('LinkedList', () => {
     list.push(20);
     expect(list.count()).toBe(2);
   });
-  xtest('sets head/tail after popping last element', () => {
+  test('sets head/tail after popping last element', () => {
     const list = new LinkedList();
     list.push(10);
     list.pop();
@@ -58,7 +117,7 @@ describe('LinkedList', () => {
     expect(list.count()).toBe(1);
     expect(list.pop()).toBe(20);
   });
-  xtest('sets head/tail after shifting last element', () => {
+  test('sets head/tail after shifting last element', () => {
     const list = new LinkedList();
     list.unshift(10);
     list.shift();
@@ -66,7 +125,8 @@ describe('LinkedList', () => {
     expect(list.count()).toBe(1);
     expect(list.shift()).toBe(20);
   });
-  xtest('deletes the element with the specified value from the list', () => {
+
+  test('deletes the element with the specified value from the list', () => {
     const list = new LinkedList();
     list.push(10);
     list.push(20);
@@ -76,13 +136,13 @@ describe('LinkedList', () => {
     expect(list.pop()).toBe(30);
     expect(list.shift()).toBe(10);
   });
-  xtest('deletes the only element', () => {
+  test('deletes the only element', () => {
     const list = new LinkedList();
     list.push(10);
     list.delete(10);
     expect(list.count()).toBe(0);
   });
-  xtest('deletes the first of two elements', () => {
+  test('deletes the first of two elements', () => {
     const list = new LinkedList();
     list.push(10);
     list.push(20);
@@ -90,7 +150,7 @@ describe('LinkedList', () => {
     expect(list.count()).toBe(1);
     expect(list.pop()).toBe(20);
   });
-  xtest('deletes the second of two elements', () => {
+  test('deletes the second of two elements', () => {
     const list = new LinkedList();
     list.push(10);
     list.push(20);
@@ -98,22 +158,27 @@ describe('LinkedList', () => {
     expect(list.count()).toBe(1);
     expect(list.pop()).toBe(10);
   });
-  xtest('delete does not modify the list if the element is not found', () => {
+
+  test('delete does not modify the list if the element is not found', () => {
     const list = new LinkedList();
     list.push(10);
+    expect(list.count()).toBe(1);
     list.delete(20);
     expect(list.count()).toBe(1);
   });
-  xtest('deletes only the first occurence', () => {
+
+  test('deletes only the first occurence', () => {
     const list = new LinkedList();
     list.push(5);
     list.push(10);
     list.push(10);
     list.push(2);
+    expect(list.count()).toBe(4);
     list.delete(10);
     expect(list.count()).toBe(3);
     expect(list.pop()).toBe(2);
     expect(list.pop()).toBe(10);
     expect(list.pop()).toBe(5);
   });
+
 });
