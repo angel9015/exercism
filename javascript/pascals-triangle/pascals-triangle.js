@@ -28,11 +28,7 @@ export class Triangle {
     this._rows[index] = this.leftRightPairs(index).map(sum)    
   }
 
-  previousRow(index) {
-    return [...this._rows[index-1], 0]
-  }
-
   leftRightPairs(index) {
-    return this.previousRow(index).map((val, idx, arr) => [arr[idx-1] || 0, arr[idx]])
+    return [...this._rows[index-1], 0].map((val, idx, arr) => [arr[idx-1] || 0, arr[idx]])
   }
 }
