@@ -36,10 +36,10 @@ export class LinkedList {
     let v = this.last.val
     if (this.isSingleElement()) {
       this.first = this.last = null
-      return v
+    } else {
+      this.last = this.last.prev
+      this.last.next = null
     }
-    this.last = this.last.prev
-    this.last.next = null
     return v
   }
 
@@ -47,10 +47,10 @@ export class LinkedList {
     let v = this.first.val
     if (this.isSingleElement()) {
       this.first = this.last = null
-      return v
+    } else {
+      this.first = this.first.next
+      this.first.prev = null
     }
-    this.first = this.first.next
-    this.first.prev = null
     return v
   }
 
@@ -66,12 +66,7 @@ export class LinkedList {
   }
 
   delete(v) {
-    if (this.first.val == v && this.isSingleElement()) {
-      this.pop()
-      return
-    }
-
-    if (this.first.next == this.last) {
+    if (this.isSingleElement() || this.first.next == this.last) {
       if (this.first.val == v) {
         this.shift()
       } else if (this.last.val == v) {
@@ -80,15 +75,22 @@ export class LinkedList {
       return
     }
 
+    const el = this.find(v)
+    if (el) {
+      if (el.next) el.next.prev = el.prev
+      if (el.prev) el.prev.next = el.next
+    }
+  }
+
+  find(v) {
     let c = this.first;
     while (c.next != null) {
       if (c.val == v) {
-        if (c.next) c.next.prev = c.prev
-        if (c.prev) c.prev.next = c.next
-        break
+        return c
       }
       c = c.next
     }
+    return null
   }
 
   count() {
