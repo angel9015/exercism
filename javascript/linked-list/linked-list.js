@@ -12,9 +12,16 @@ export class LinkedList {
     this.last = null
   }
 
+  isEmpty() {
+    return this.first == null
+  }
+
+  isSingleElement() {
+    return this.first == this.last
+  }
+
   push(el) {
-    if (this.first == null) {
-      // Empty list
+    if (this.isEmpty()) {
       this.first = new Node(el, null, null)
       this.last = this.first
     } else {
@@ -27,8 +34,7 @@ export class LinkedList {
 
   pop() {
     let v = this.last.val
-    if (this.last == this.first) {
-      // Only 1 element in list
+    if (this.isSingleElement()) {
       this.first = this.last = null
       return v
     }
@@ -39,8 +45,7 @@ export class LinkedList {
 
   shift() {
     let v = this.first.val
-    if (this.last == this.first) {
-      // Only 1 element in list
+    if (this.isSingleElement()) {
       this.first = this.last = null
       return v
     }
@@ -50,8 +55,7 @@ export class LinkedList {
   }
 
   unshift(el) {
-    if (this.first == null) {
-      // Empty list
+    if (this.isEmpty()) {
       this.first = new Node(el, null, null)
       this.last = this.first
     } else {
@@ -62,36 +66,29 @@ export class LinkedList {
   }
 
   delete(v) {
-    if (this.first.val == v && this.first == this.last) {
-      // 1 Element
-      this.first = null;
-      this.last = null
+    if (this.first.val == v && this.isSingleElement()) {
+      this.pop()
       return
     }
+
     if (this.first.next == this.last) {
-      // 2 Elements
       if (this.first.val == v) {
-        this.last.prev = null;
-        this.first = this.last;
+        this.shift()
       } else if (this.last.val == v) {
-        this.first.next = null;
-        this.last = this.first;
+        this.pop()
       }
       return
     }
 
-    // N elements
     let c = this.first;
     while (c.next != null) {
-
       if (c.val == v) {
-        c.next.prev = c.prev
-        c.prev.next = c.next
+        if (c.next) c.next.prev = c.prev
+        if (c.prev) c.prev.next = c.next
         break
       }
       c = c.next
     }
-
   }
 
   count() {
