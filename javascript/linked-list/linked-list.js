@@ -92,10 +92,9 @@ export class LinkedList {
   }
 
   count() {
-    if (this.first == null) return 0;
     let c = this.first;
-    let cnt = 1;
-    while (c != this.last) {
+    let cnt = 0;
+    while (c != null) {
       cnt += 1;
       c = c.next
     }
