@@ -66,12 +66,11 @@ export class LinkedList {
   }
 
   delete(v) {
-    if (this.isSingleElement() || this.first.next == this.last) {
-      if (this.first.val == v) {
-        this.shift()
-      } else if (this.last.val == v) {
-        this.pop()
-      }
+    if (this.first.val == v) {
+      this.shift()
+      return
+    } else if (this.last.val == v) {
+      this.pop()
       return
     }
 
@@ -84,7 +83,7 @@ export class LinkedList {
 
   find(v) {
     let c = this.first;
-    while (c.next != null) {
+    while (c != null) {
       if (c.val == v) {
         return c
       }
