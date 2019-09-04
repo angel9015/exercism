@@ -1,50 +1,38 @@
 defmodule Dot do
-  defmacro graph(ast) do
-    quote do
-      unquote(do_graph(ast, %Graph{}) |> Macro.escape())
-    end
-  end
+  defmacro graph(ast), do: ast |> do_graph_outer(%Graph{}) |> Macro.escape()
 
-  def do_graph([do: {:__block__, _ctx, props}], acc) do
-    props |> Enum.reduce(acc, &do_block_reducer/2)
-  end
+  defp do_graph_outer([do: tup], acc), do: do_graph(tup, acc)
 
-  def do_graph([do: {:graph, _ctx, [[]]}], %Graph{} = acc), do: acc
+  defp do_graph({:__block__, _ctx, props}, acc), do: props |> Enum.reduce(acc, &block_reducer/2)
+  defp do_graph({:graph, _ctx, [[]]}, %Graph{} = acc), do: acc
 
-  def do_graph([do: {:graph, _ctx, [[props]]}], %Graph{} = acc), do: acc |> insert_element(:attrs, props)
+  defp do_graph({:graph, _ctx, [[props]]}, %Graph{} = acc),
+    do: acc |> insert_element(:attrs, props)
 
+  defp do_graph({:--, _ctx, props}, %Graph{} = acc),
+    do: acc |> insert_element(:edges, parse_edges(props))
 
-  def do_graph([do: {:--, _ctx, props}], %Graph{} = acc) do
-    acc |> insert_element(:edges, do_graph_edges(props))
-  end
+  defp do_graph({atom, _ctx, props}, %Graph{} = acc) when is_atom(atom),
+    do: acc |> insert_element(:nodes, parse_atom(atom, props))
 
-  def do_graph([do: {atom, _ctx, props}], %Graph{} = acc) when is_atom(atom) do
-    acc |> insert_element(:nodes, do_graph_atom(atom, props))
-  end
+  defp do_graph(_not, _acc), do: raise(ArgumentError)
 
-  def do_graph([do: _not], _acc), do: raise(ArgumentError)
-
-  defp do_block_reducer(stuff, acc), do: do_graph([do: stuff], acc)
+  defp block_reducer(stuff, acc), do: do_graph(stuff, acc)
 
   defp insert_element(acc, key, el), do: acc |> Map.update!(key, &([el | &1] |> Enum.sort()))
 
-  def do_graph_atom({:., _a, _b}, _z), do: raise(ArgumentError)
-  def do_graph_atom(atom, nil) when is_atom(atom), do: {atom, []}
+  defp parse_atom(atom, nil) when is_atom(atom), do: {atom, []}
 
-  def do_graph_atom(atom, [[err, _zz]]) when is_atom(atom) and is_binary(err),
+  defp parse_atom(atom, [[err, _zz]]) when is_atom(atom) and is_binary(err),
     do: raise(ArgumentError)
 
-  def do_graph_atom(atom, [{{:., _a, _b}, _ctx, _z}]) when is_atom(atom), do: raise(ArgumentError)
-  def do_graph_atom(atom, [props]) when is_atom(atom), do: {atom, props}
-  def do_graph_atom(_v, _z), do: raise(ArgumentError)
+  defp parse_atom(atom, [{{:., _a, _b}, _ctx, _z}]) when is_atom(atom),
+    do: raise(ArgumentError)
 
-  # [{:a, [line: 13], nil}, {:b, [line: 13], [[color: :blue]]}]
-  def do_graph_edges([{atom1, _ctx1, nil}, {atom2, _ctx2, nil}]), do: {atom1, atom2, []}
+  defp parse_atom(atom, [props]) when is_atom(atom), do: {atom, props}
+  defp parse_atom(_v, _z), do: raise(ArgumentError)
 
-  def do_graph_edges([{atom1, _ctx1, nil}, {atom2, _ctx2, [props]}]), do: {atom1, atom2, props}
-  def do_graph_edges(_other), do: raise(ArgumentError)
-
-  def graph_reducer({atom, props}, acc) do
-    acc |> Map.update(:nodes, [], &[do_graph(atom, props) | &1])
-  end
+  defp parse_edges([{atom1, _ctx1, nil}, {atom2, _ctx2, nil}]), do: {atom1, atom2, []}
+  defp parse_edges([{atom1, _ctx1, nil}, {atom2, _ctx2, [props]}]), do: {atom1, atom2, props}
+  defp parse_edges(_other), do: raise(ArgumentError)
 end
