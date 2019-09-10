@@ -1,2 +1,3 @@
 def is_isogram(string):
-    return len(set(z.lower() for z in string if z.isalpha())) == len([z for z in string if z.isalpha()])
+    lower_letters = [z for z in string.lower() if z.isalpha()]
+    return len(set(lower_letters)) == len(lower_letters)
