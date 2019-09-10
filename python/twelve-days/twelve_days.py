@@ -32,7 +32,7 @@ THINGS = {
 def create_things(verse):
     if verse == 1:
         return THINGS[verse]
-    return ', '.join(THINGS[n] for n in range(verse, 1, -1))+', and ' + THINGS[1]
+    return f"{', '.join(THINGS[n] for n in range(verse, 1, -1))}, and {THINGS[1]}"
 
 
 def recite_verse(verse):
