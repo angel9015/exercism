@@ -1,6 +1,7 @@
 (ns run-length-encoding)
 
 (defn- enc-mapper [l]
+  "encode a sequence of same characters"
   (let [ch (first l)
         cnt (count l)]
     (str (if (> cnt 1) cnt "") ch)))
@@ -16,10 +17,12 @@
        (clojure.string/join "")))
 
 (defn- dec-converter [s]
+  "decode a sequence of same characters"
   (if (= (count s) 1)
     s
     (let [number (Integer/parseInt (subs s 0 (- (count s) 1)))
-          letter (last s)] (clojure.string/join (repeat number letter)))))
+          letter (last s)]
+      (clojure.string/join (repeat number letter)))))
 
 (defn run-length-decode
   "decodes a run-length-encoded string"
