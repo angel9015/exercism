@@ -1,10 +1,6 @@
 export class List {
   constructor(arr) {
-    if (arr) {
-      this._list = arr
-    } else {
-      this._list = []
-    }
+    this._list = arr ? arr : [];
   }
 
   get values() {
