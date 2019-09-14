@@ -1,8 +1,3 @@
-//
-// This is only a SKELETON file for the 'List - Ops' exercise. It's been provided as a
-// convenience to get you started writing code faster.
-//
-
 export class List {
   constructor(arr) {
     if (arr) {
@@ -17,9 +12,7 @@ export class List {
   }
 
   append(other) {
-    other.values.forEach(el => {
-      this._list.push(el)
-    })
+    this._list = [...this._list, ...other._list]
     return this
   }
 
@@ -31,29 +24,54 @@ export class List {
   }
 
   filter(f) {
-    this._list = this._list.filter(f)
+    let newList = []
+    this._list.forEach(item => {
+      if (f(item)) newList.push(item)
+    })
+    this._list = newList
     return this
   }
 
   map(f) {
-    this._list = this._list.map(f)
+    let newList = []
+    this._list.forEach(item => {
+      newList.push(f(item))
+    })
+    this._list = newList
     return this
   }
 
   length() {
-    return this._list.length
+    let l = 0
+    this._list.forEach(item => {
+      l++;
+    })
+    return l;
   }
 
   foldl(f, init) {
-    return this._list.reduce(f, init)
+    let acc = init;
+    this._list.forEach(item => {
+
+      acc = f(acc, item);
+    })
+    return acc;
   }
 
   foldr(f, init) {
-    return this._list.reduceRight(f, init)
+    let acc = init;
+    [...this._list].reverse().forEach(item => {
+      acc = f(acc, item);
+    })
+    return acc;
   }
 
   reverse() {
-    this._list = this._list.reverse()
+    let newList = []
+    this._list.forEach(item => {
+      newList.splice(0, 0, item)
+    })
+    this._list = newList
     return this
   }
 }

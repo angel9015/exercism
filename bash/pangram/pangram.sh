@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
 
 
-main2 () {
+main () {
     # Remove non-alpha characters
     # Covert to lowercase
     # Put each character in a separate line
-    # Sort the characters
-    # Get 1 of each character
+    # Sort unique the characters
     # Join again the lines
     # And check if we have the full alphabet
-    output=`echo $1 | tr -cd '[:alpha:]' | tr '[:upper:]' '[:lower:]' | fold -w1 | sort | uniq | awk '{print}' ORS=''`
-    if [[ $output == 'abcdefghijklmnopqrstuvwxyz' ]]; then
+    output=`echo $1 | tr -cd '[:alpha:]' | tr '[:upper:]' '[:lower:]' | fold -w1 | sort -u | tr -d \\n`
+    echo $output
+    if [[ $output == 'a b c d e f g h i j k l m n o p q r s t u v w x y z' ]]; then
         echo "true"
     else
         echo "false"
     fi;
 }
 
-main () {
+main2 () {
     input=${1,,}
     is_pangram=1
     for char_to_check in {a..z}; do
