@@ -8,46 +8,69 @@ export class List {
   }
 
   append(other) {
-    this._list = [...this._list, ...other._list]
+    this._list = [...this, ...other]
     return this
   }
 
+  push(item) {
+    this._list = [...this._list, item]
+  }
+
+  unshift(item) {
+    this._list = [item, ...this._list]
+  }
+
   concat(other) {
-    for (let el of other.values) {
+    for (let el of other) {
       this.append(el)
     }
     return this
   }
 
   filter(f) {
-    let newList = []
-    for (let item of this._list) {
-      if (f(item)) newList = [...newList, item]
+    let newList = new List()
+    for (let item of this) {
+      if (f(item)) newList.push(item)
     }
-    this._list = newList
-    return this
+    return newList
   }
 
   map(f) {
-    let newList = []
-    for (let item of this._list) {
-      newList = [...newList, f(item)]
+    let newList = new List()
+    for (let item of this) {
+      newList.push(f(item))
     }
-    this._list = newList
-    return this
+    return newList
   }
 
   length() {
     let l = 0
-    for (let item of this._list) {
+    for (let _item of this._list) {
       l++;
     }
     return l;
   }
 
+  [Symbol.iterator]() {
+    let idx = 0;
+    let that = this
+    return {
+      next() {
+        if (idx < that.length()) return {
+          value: that._list[idx++],
+          done: false
+        }
+        return {
+          value: undefined,
+          done: true
+        }
+      }
+    }
+  }
+
   foldl(f, init) {
     let acc = init;
-    for (let item of this._list) {
+    for (let item of this) {
       acc = f(acc, item);
     }
     return acc;
@@ -55,18 +78,17 @@ export class List {
 
   foldr(f, init) {
     let acc = init;
-    for (let item of this.reverse().values) {
+    for (let item of this.reverse()) {
       acc = f(acc, item);
     }
     return acc;
   }
 
   reverse() {
-    let newList = []
-    for (let item of this._list) {
-      newList = [item, ...newList]
+    let newList = new List()
+    for (let item of this) {
+      newList.unshift(item)
     }
-    this._list = newList
-    return this
+    return newList
   }
 }
