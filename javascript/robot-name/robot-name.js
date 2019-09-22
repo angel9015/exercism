@@ -1,26 +1,26 @@
-TOTAL_NAMES = 26 * 26 * 10 * 10 * 10
+const TOTAL_NAMES = 26 * 26 * 10 * 10 * 10
+const translateName = function (number) {
+    const letter1 = String.fromCharCode(Math.floor(number / (26 * 10 * 10 * 10)) + 65)
+    let rem = number % (26 * 10 * 10 * 10)
+    const letter2 = String.fromCharCode(Math.floor(rem / (10 * 10 * 10)) + 65)
+    rem = rem % (10 * 10 * 10)
+    const num1 = Math.floor(rem / (10 * 10))
+    rem = rem % (10 * 10)
+    const num2 = Math.floor(rem / 10)
+    rem = rem % 10
+    const num3 = rem
 
-function createName() {
-    return createLetter() + createLetter() + createNumber() + createNumber() + createNumber()
-}
-
-function createLetter() {
-    let rnd = Math.floor(Math.random() * 26 + 65);
-    return String.fromCharCode(rnd);
-}
-
-function createNumber() {
-    return Math.floor(Math.random() * 10);
+    return letter1 + letter2 + num1 + num2 + num3
 }
 
 
 export class Robot {
     constructor() {
-        this._name = Robot.createUniqueName()
+        this._name = Robot.pickName()
     }
 
     reset() {
-        this._name = Robot.createUniqueName()
+        this._name = Robot.pickName()
     }
 
     set name(v) {
@@ -32,27 +32,22 @@ export class Robot {
     }
 }
 
-Robot.freeNames = []
-for (let i = 0; i < TOTAL_NAMES; i++) {
-    Robot.freeNames.push(i)
-}
-Robot.createUniqueName = () => {
-    let name = ''
-    let tries = 0
-    do {
-        name = createName()
-        tries++;
-
-    } while (Robot.usedNames.indexOf(name) >= 0 && tries < 10)
-
-    if (tries > 10) {
-        name = Robot.bruteForceCreateName()
+const initNames = () => {
+    Robot.availableNames = []
+    for (let i = 0; i < TOTAL_NAMES; i++) {
+        Robot.availableNames.push(i)
     }
-    Robot.usedNames.push(name)
-    return name
+}
+initNames();
+
+Robot.pickName = () => {
+    let idx = Math.floor(Math.random() * Math.floor(Robot.availableNames.length));
+    let nameNumber = Robot.availableNames[idx]
+    Robot.availableNames.splice(idx, 1)
+    return translateName(nameNumber)
 }
 
 
 Robot.releaseNames = () => {
-    Robot.usedNames = []
+    initNames()
 };

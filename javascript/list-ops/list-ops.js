@@ -1,3 +1,5 @@
+import { throwStatement } from "@babel/types";
+
 export class List {
   constructor(arr) {
     this._list = arr || [];
@@ -51,20 +53,9 @@ export class List {
     return l;
   }
 
-  [Symbol.iterator]() {
-    let idx = 0;
-    let that = this
-    return {
-      next() {
-        if (idx < that.length()) return {
-          value: that._list[idx++],
-          done: false
-        }
-        return {
-          value: undefined,
-          done: true
-        }
-      }
+  *[Symbol.iterator]() {
+    for (let i = 0; i < this.length(); i++) {
+      yield this._list[i]
     }
   }
 
