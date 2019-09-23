@@ -53,10 +53,14 @@ export class List {
     return l;
   }
 
+  /*
   *[Symbol.iterator]() {
     for (let i = 0; i < this.length(); i++) {
       yield this._list[i]
     }
+  }*/
+  [Symbol.iterator]() {
+    return this._list[Symbol.iterator]()
   }
 
   foldl(f, init) {
