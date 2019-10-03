@@ -1,19 +1,11 @@
 #!/usr/bin/env bash
 
 is_caps() {
-    if [[ $1 == ${1^^} && $1 != ${1,,} ]]; then
-        return 0
-    else
-        return 1
-    fi
+    [[ $1 == "${1^^}" && $1 != "${1,,}" ]]
 }
 
 is_question() {
-    if [[ $1 =~ \?[[:space:]]*$ ]]; then
-        return 0
-    else
-        return 1
-    fi
+    [[ $1 =~ \?[[:space:]]*$ ]]
 }
 
 main () {

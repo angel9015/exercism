@@ -20,8 +20,8 @@
   make sure that this checksum mod 11 == 0"
   (let [normalized-isbn (re-find #"^\d{9}[X\d]$" (clojure.string/replace isbn "-" ""))]
     (if-not normalized-isbn false (->
-                         normalized-isbn
-                         to-num-list
-                         calculate-checksum
-                         (mod 11)
-                         zero?) )))
+                                   normalized-isbn
+                                   to-num-list
+                                   calculate-checksum
+                                   (mod 11)
+                                   zero?))))
