@@ -1,13 +1,22 @@
 const TOTAL_NAMES = 26 * 26 * 10 * 10 * 10
+const LETTER1_DIV = 26 * 10 * 10 * 10
+const LETTER2_DIV = 10 * 10 * 10
+const NUM1_DIV = 10 * 10 
+const NUM2_DIV = 10
+
+const LETTER_A = 'A'.charCodeAt(0)
+
+const robotLetter = (n, div) => String.fromCharCode(Math.floor(n / div) + LETTER_A)
+
 const translateName = function (number) {
-    const letter1 = String.fromCharCode(Math.floor(number / (26 * 10 * 10 * 10)) + 65)
-    let rem = number % (26 * 10 * 10 * 10)
-    const letter2 = String.fromCharCode(Math.floor(rem / (10 * 10 * 10)) + 65)
-    rem = rem % (10 * 10 * 10)
-    const num1 = Math.floor(rem / (10 * 10))
-    rem = rem % (10 * 10)
-    const num2 = Math.floor(rem / 10)
-    rem = rem % 10
+    const letter1 = robotLetter(number, LETTER1_DIV)
+    let rem = number % LETTER1_DIV
+    const letter2 = robotLetter(rem, LETTER2_DIV)
+    rem = rem % LETTER2_DIV
+    const num1 = Math.floor(rem / NUM1_DIV)
+    rem = rem % NUM1_DIV
+    const num2 = Math.floor(rem / NUM2_DIV)
+    rem = rem % NUM2_DIV
     const num3 = rem
 
     return letter1 + letter2 + num1 + num2 + num3
