@@ -1,38 +1,37 @@
 #!/usr/bin/env bash
 
 main () {
-    score=0
-    word=${1^^}
+    local score=0
+    local word=${1^^}
     for (( i=0; i<${#word}; i++ ))
     do  
-        letter=${word:$i:1}
+        local letter=${word:$i:1}
                 
         case $letter in
-        [D,G]*)
+        [DG]*)
             ((score+=2))
             ;;
-        [B,C,M,P]*)
+        [BCMP]*)
             ((score+=3))
             ;;
-        [F,H,V,W,Y]*)
+        [FHVWY]*)
             ((score+=4))
             ;;
         [K]*)
             ((score+=5))
             ;;
-        [J,X]*)
+        [JX]*)
             ((score+=8))
             ;;
-        [Q,Z]*)
+        [QZ]*)
             ((score+=10))
             ;;    
-        *)
+        [AEIOULNRST])
             ((score+=1))
             ;;
         esac
-        #echo $letter
     done
-    echo $score
+    echo "$score"
 }
 
 main "$@"
