@@ -236,7 +236,7 @@ class ComplexNumberTest {
         val actual = ComplexNumber(real = 1.0, imag = 2.0).imag
         assertDoublesEqual(expected, actual)
     }
-    /*
+
     @Ignore
     @Test
     fun testExponentialOfPurelyImaginaryNumber() {
@@ -244,7 +244,7 @@ class ComplexNumberTest {
         val actual = exponential(ComplexNumber(imag = PI))
         assertComplexNumbersEqual(expected, actual)
     }
-    
+
     @Ignore
     @Test
     fun testExponentialOfZero() {
@@ -268,6 +268,6 @@ class ComplexNumberTest {
         val actual = exponential(ComplexNumber(real = ln(2.0), imag = PI))
         assertComplexNumbersEqual(expected, actual)
     }
-    */
+
 
 }
