@@ -13,16 +13,16 @@ encdec_int () {
     local i=$2
     local char
     local char_value
-    local new_char
     local new_char_value
+    local -ri ascii_a=97
+    local -ri ascii_z=$((97 + 25))
 
     char="${text:$i:1}"
     char_value=$(ord $char)
 
-    if (( char_value >=97 && char_value <= 97+25 )); then
-        new_char_value=$(( 97 + 97 + 26 - $char_value - 1))
-        new_char=$(chr $new_char_value)
-        echo -n $new_char
+    if (( char_value >= ascii_a && char_value <= ascii_z )); then
+        new_char_value=$(( ascii_a + ascii_z - $char_value ))
+        chr $new_char_value
     else
         echo -n $char
     fi
@@ -49,15 +49,12 @@ decode () {
 
 
 main () {
-    local text=${2//[^A-Za-z0-9]/}
+    local text=${2//[^[:alnum:]]/}
     text=${text,,}
-    if [[ $1 == "encode" ]]; then
-        encode $text;
+    if [[ $1 == "encode" || $1 == decode ]]; then
+        $1 $text;
     fi
 
-    if [[ $1 == "decode" ]]; then
-        decode $text;
-    fi
     echo
 }
 
