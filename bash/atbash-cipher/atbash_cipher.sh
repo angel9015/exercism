@@ -30,7 +30,6 @@ encdec_int () {
 
 encode () {
     local text=$1
-
     for (( i=0; i<${#text}; i++ )); do
         encdec_int $text $i
         if (( (i+1) % 5 == 0 && (i+1)<${#text} )); then
@@ -42,11 +41,6 @@ encode () {
 
 decode () {
     local text=$1
-    local char
-    local char_value
-    local new_char
-    local new_char_value
-
     for (( i=0; i<${#text}; i++ )); do
         encdec_int $text $i
 
