@@ -1,7 +1,7 @@
 object BinarySearch {
     fun search(list: List<Int>, value: Int): Int {
-        if(list.size == 0) return -1
-        val idx = list.size.div(2)
+        if(list.isEmpty()) return -1
+        val idx = list.size / 2
         val middleValue = list[idx]
 
         return if (middleValue == value) {
