@@ -2,7 +2,7 @@
 
 main() {
    
-    declare -iA colors
+    declare -A colors
     colors[black]=0
     colors[brown]=1
     colors[red]=2
@@ -23,7 +23,7 @@ main() {
     local c2=$2
 
 
-    if [[ ${colors[c1]}+1 == "1" || ${colors[c2]}+2  == "2" ]]; then
+    if [[ -z ${colors[$c1]} || -z ${colors[$c2]} ]]; then
         echo "invalid color"
         return 1
     else
