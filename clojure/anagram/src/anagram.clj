@@ -1,12 +1,12 @@
 (ns anagram
-  (:require [clojure.set :as set]))
+  (:require [clojure.string :as str]))
 
 (defn- is-anagram? [word1 word2]
-  (let [l-word1 (clojure.string/lower-case word1)
-        l-word2 (clojure.string/lower-case word2)
-        s-word1 (sort (seq l-word1))
-        s-word2 (sort (seq l-word2))]
+  (let [l-word1 (str/lower-case word1)
+        l-word2 (str/lower-case word2)
+        s-word1 (sort l-word1)
+        s-word2 (sort l-word2)]
     (and (= s-word1 s-word2) (not= l-word1 l-word2))))
 
 (defn anagrams-for [word prospect-list]
-  (filter #(is-anagram? %1 word) prospect-list))
+  (filter (partial is-anagram? word) prospect-list))
