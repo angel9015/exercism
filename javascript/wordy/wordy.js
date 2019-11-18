@@ -20,14 +20,14 @@ function operate(op, nextNumber, acc) {
 }
 
 function evaluate(tokens) {
-    let acc = tokens.shift() * 1;
+    let acc = Number(tokens.shift());
 
     while (true) {
         let op = tokens.shift()
         if (!op) {
             break
         } else {
-            let nextNumber = tokens.shift() * 1;
+            let nextNumber = Number(tokens.shift());
             acc = operate(op, nextNumber, acc)
         }
     }
