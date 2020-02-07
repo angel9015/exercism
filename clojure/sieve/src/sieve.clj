@@ -1,11 +1,12 @@
 (ns sieve)
 
-(defn not-in [col el] (not (some #(= el %1) col)))
+(defn not-in [col el] (not (contains? (set col) el)))
+
 
 (defn- do-sieve [numbers primes]
-  (cond
+  (if
     (empty? numbers) primes
-    :else (let [current-number (first numbers)
+    (let [current-number (first numbers)
                 new-primes (conj primes current-number)
                 last-number (last numbers)
                 to-sieve (range current-number (+ 1 last-number) current-number)
