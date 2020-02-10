@@ -17,5 +17,5 @@ class Luhn:
 
         acc = sum((d * 2 if d < 5 else d * 2 - 9) if idx % 2 else d for idx, d in enumerate(digits))
             
-        return False if acc % 10 else True
+        return not acc % 10
         
