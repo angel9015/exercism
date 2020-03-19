@@ -1,11 +1,10 @@
-MINUTES_IN_A_DAY = 24 * 60
 HOURS_IN_DAY = 24
 MINUTES_IN_HOUR = 60
+MINUTES_IN_A_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR
 
 class Clock:
     def __init__(self, hour, minute):
         hour_norm = hour % HOURS_IN_DAY
-        minutes_norm = minute % MINUTES_IN_HOUR
         self.minutes = hour_norm * MINUTES_IN_HOUR + minute
         self.minutes = self.minutes % MINUTES_IN_A_DAY
 
@@ -22,7 +21,6 @@ class Clock:
 
     def __add__(self, minutes):
         return Clock(0, self.minutes + minutes)
-
 
     def __sub__(self, minutes):
         return Clock(0, self.minutes - minutes)
