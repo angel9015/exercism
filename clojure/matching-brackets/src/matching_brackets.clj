@@ -12,8 +12,8 @@
 (defn- bracket-reducer [acc el]
   (let [top-element (first acc)]
     (cond
-      (contains? opening-brackets el) (cons el acc)
-      (contains? closing-brackets el) (if (= top-element (get bracket-pairs el)) (rest acc) (cons el acc))
+      (opening-brackets el) (cons el acc)
+      (closing-brackets el) (if (= top-element (get bracket-pairs el)) (rest acc) (cons el acc))
       true acc)))
 
 ; Reduce the characters into a list; if the length of that list is 0 then the brackets are matching
