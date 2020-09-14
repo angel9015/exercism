@@ -1,4 +1,5 @@
 EARTH_ORBIT_IN_S = 31557600;
+
 PLANET_ORBITS_RATIOS = {
   'earth': 1,
   'mercury': 0.2408467,

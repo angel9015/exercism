@@ -1,6 +1,5 @@
 from __future__ import division
 
-
 def gcd(r):
     x, y = r.numer, r.denom
     while(y): 
