@@ -1,22 +1,22 @@
 EARTH_ORBIT_IN_S = 31557600;
 
-PLANET_ORBITS_RATIOS = {
-  'earth': 1,
-  'mercury': 0.2408467,
-  'venus': 0.61519726,
-  'mars': 1.8808158,
-  'jupiter': 11.862615,
-  'saturn': 29.447498,
-  'uranus': 84.016846,
-  'neptune': 164.79132
+PLANET_ORBITS_IN_S = {
+  'earth': 1 * EARTH_ORBIT_IN_S,
+  'mercury': 0.2408467 * EARTH_ORBIT_IN_S,
+  'venus': 0.61519726 * EARTH_ORBIT_IN_S,
+  'mars': 1.8808158 * EARTH_ORBIT_IN_S,
+  'jupiter': 11.862615 * EARTH_ORBIT_IN_S,
+  'saturn': 29.447498 * EARTH_ORBIT_IN_S,
+  'uranus': 84.016846 * EARTH_ORBIT_IN_S,
+  'neptune': 164.79132 * EARTH_ORBIT_IN_S
 }
 
 class SpaceAge(object):
     def __init__(self, seconds):
         self.seconds = seconds
-    
+
     def calc_space_age(self, planet):
-        return round(self.seconds / (EARTH_ORBIT_IN_S * PLANET_ORBITS_RATIOS[planet]), 2)
+        return round(self.seconds / (PLANET_ORBITS_IN_S[planet]), 2)
 
     def on_earth(self):
         return self.calc_space_age('earth')
