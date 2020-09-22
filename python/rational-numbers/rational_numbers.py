@@ -1,22 +1,24 @@
-from __future__ import division
-
-def gcd(r):
-    x, y = r.numer, r.denom
-    while(y): 
-        x, y = y, x % y 
-    return x
+import math
 
 class Rational(object):
     def __init__(self, numer, denom):
         self.numer = numer
         self.denom = denom
+        g = math.gcd(self.numer, self.denom)
+        self.numer = int(self.numer / g)
+        self.denom = int(self.denom /g )
+        
+        self.pm = '+' 
+        if self.numer < 0 and self.denom > 0 or \
+            self.numer > 0 and self.denom < 0:
+            self.pm = '-'
 
     def __eq__(self, other):
         if self.numer == 0:
             return True if other.numer == 0 else False
-        r1 = self.simplify()
-        r2 = self.simplify()
-        return r1.numer == r2.numer and r1.denom == r2.denom
+        return abs(self.numer) == abs(other.numer) \
+             and abs(self.denom) == abs(other.denom) \
+                  and self.pm == other.pm
 
     def __repr__(self):
         return '{}/{}'.format(self.numer, self.denom)
@@ -46,5 +48,5 @@ class Rational(object):
         return pow(pow(base, self.numer), 1/self.denom)
 
     def simplify(self):
-        g = gcd(self)
-        return Rational(self.numer / g, self.denom /g  )
+        g = math.gcd(self.numer, self.denom)
+        return Rational(int(self.numer / g), int(self.denom /g ))
