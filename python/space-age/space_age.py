@@ -11,33 +11,16 @@ PLANET_ORBITS_IN_S = {
   'neptune': 164.79132 * EARTH_ORBIT_IN_S
 }
 
+def calc_space_age(seconds, planet):
+    print(seconds, planet)
+    return round(seconds / (PLANET_ORBITS_IN_S[planet]), 2)
+
+
+
 class SpaceAge(object):
     def __init__(self, seconds):
         self.seconds = seconds
-
-    def calc_space_age(self, planet):
-        return round(self.seconds / (PLANET_ORBITS_IN_S[planet]), 2)
-
-    def on_earth(self):
-        return self.calc_space_age('earth')
-
-    def on_mercury(self):
-        return self.calc_space_age('mercury')
-
-    def on_venus(self):
-        return self.calc_space_age('venus')
-
-    def on_mars(self):
-        return self.calc_space_age('mars')
-
-    def on_jupiter(self):
-        return self.calc_space_age('jupiter')
-
-    def on_saturn(self):
-        return self.calc_space_age('saturn')
-
-    def on_uranus(self):
-        return self.calc_space_age('uranus')
-
-    def on_neptune(self):
-        return self.calc_space_age('neptune')
+        for planet in PLANET_ORBITS_IN_S.keys():
+            setattr(self, 'on_' + planet, lambda: calc_space_age(self.seconds, planet))
+            
+            
