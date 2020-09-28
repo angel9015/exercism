@@ -2,23 +2,21 @@ import math
 
 class Rational(object):
     def __init__(self, numer, denom):
-        self.numer = numer
-        self.denom = denom
-        g = math.gcd(self.numer, self.denom)
-        self.numer = int(self.numer / g)
-        self.denom = int(self.denom /g )
         
-        self.pm = '+' 
+        g = math.gcd(numer, denom)
+        self.numer = numer // g
+        self.denom = denom // g 
+        
         if self.numer < 0 and self.denom > 0 or \
             self.numer > 0 and self.denom < 0:
-            self.pm = '-'
+            self.numer = - abs(self.numer)
+        else:
+            self.numer = abs(self.numer)
+        self.denom = abs(self.denom)
 
     def __eq__(self, other):
-        if self.numer == 0:
-            return True if other.numer == 0 else False
-        return abs(self.numer) == abs(other.numer) \
-             and abs(self.denom) == abs(other.denom) \
-                  and self.pm == other.pm
+        return self.numer == other.numer \
+             and self.denom == other.denom \
 
     def __repr__(self):
         return '{}/{}'.format(self.numer, self.denom)
@@ -47,6 +45,3 @@ class Rational(object):
     def __rpow__(self, base):
         return pow(pow(base, self.numer), 1/self.denom)
 
-    def simplify(self):
-        g = math.gcd(self.numer, self.denom)
-        return Rational(int(self.numer / g), int(self.denom /g ))
