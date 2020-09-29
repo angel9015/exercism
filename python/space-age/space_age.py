@@ -12,7 +12,6 @@ PLANET_ORBITS_IN_S = {
 }
 
 def calc_space_age(seconds, planet):
-    print(seconds, planet)
     return round(seconds / (PLANET_ORBITS_IN_S[planet]), 2)
 
 
@@ -21,6 +20,6 @@ class SpaceAge(object):
     def __init__(self, seconds):
         self.seconds = seconds
         for planet in PLANET_ORBITS_IN_S.keys():
-            setattr(self, 'on_' + planet, lambda: calc_space_age(self.seconds, planet))
+            setattr(self, 'on_' + planet, (lambda p: lambda: calc_space_age(self.seconds, p))(planet))
             
             
