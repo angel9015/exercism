@@ -16,6 +16,6 @@ public class HighScores
     
     public int PersonalBest() => this.list.Max();
     
-    public List<int> PersonalTopThree() => this.list.OrderBy(x=>-x).ToList().GetRange(0, this.list.Count()>3?3:this.list.Count());
+    public List<int> PersonalTopThree() => this.list.OrderByDescending(x=>x).Take(3).ToList();
 
 }
