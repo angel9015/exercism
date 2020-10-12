@@ -21,43 +21,13 @@ public class SpaceAge
         this.seconds = seconds ;
     }
 
-    public double OnEarth()
-    {
-        return this.seconds / EARTH_SECONDS; 
-    }
+    public double OnEarth() => this.seconds / EARTH_SECONDS; 
+    public double OnMercury() => this.seconds / EARTH_SECONDS / ORBIT_RATIOS["mercury"];
+    public double OnVenus() => this.seconds / EARTH_SECONDS / ORBIT_RATIOS["venus"];
+    public double OnMars() => this.seconds / EARTH_SECONDS / ORBIT_RATIOS["mars"];
+    public double OnJupiter() => this.seconds / EARTH_SECONDS / ORBIT_RATIOS["jupyter"];
+    public double OnSaturn() => this.seconds / EARTH_SECONDS / ORBIT_RATIOS["saturn"];
+    public double OnUranus() => this.seconds / EARTH_SECONDS / ORBIT_RATIOS["uranus"];
+    public double OnNeptune() => this.seconds / EARTH_SECONDS / ORBIT_RATIOS["neptune"];
 
-    public double OnMercury()
-    {
-        return this.seconds / EARTH_SECONDS / ORBIT_RATIOS["mercury"];
-    }
-
-    public double OnVenus()
-    {
-        return this.seconds / EARTH_SECONDS / ORBIT_RATIOS["venus"];
-    }
-
-    public double OnMars()
-    {
-        return this.seconds / EARTH_SECONDS / ORBIT_RATIOS["mars"];
-    }
-
-    public double OnJupiter()
-    {
-        return this.seconds / EARTH_SECONDS / ORBIT_RATIOS["jupyter"];
-    }
-
-    public double OnSaturn()
-    {
-        return this.seconds / EARTH_SECONDS / ORBIT_RATIOS["saturn"];
-    }
-
-    public double OnUranus()
-    {
-        return this.seconds / EARTH_SECONDS / ORBIT_RATIOS["uranus"];
-    }
-
-    public double OnNeptune()
-    {
-        return this.seconds / EARTH_SECONDS / ORBIT_RATIOS["neptune"];
-    }
 }
