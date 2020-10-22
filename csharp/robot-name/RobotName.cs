@@ -19,23 +19,23 @@ public class Robot
         }
     }
 
-    static String RobotLetter(int n, int div)
+    static string RobotLetter(int n, int div)
     {
         char c = (char)(Math.Floor((double)n / div) + LETTER_A);
         return c.ToString();
     }
 
-    static String TranslateName(int number)
+    static string TranslateName(int number)
     {
-        String letter1 = RobotLetter(number, LETTER1_DIV);
+        string letter1 = RobotLetter(number, LETTER1_DIV);
         var rem = number % LETTER1_DIV;
-        String letter2 = RobotLetter(rem, LETTER2_DIV);
+        string letter2 = RobotLetter(rem, LETTER2_DIV);
         rem = rem % LETTER2_DIV;
 
-        String num1 = Math.DivRem(rem, NUM1_DIV, out rem).ToString();
-        String num2 = Math.DivRem(rem, NUM2_DIV, out rem).ToString();
+        string num1 = Math.DivRem(rem, NUM1_DIV, out rem).ToString();
+        string num2 = Math.DivRem(rem, NUM2_DIV, out rem).ToString();
         rem = rem % NUM2_DIV;
-        String num3 = rem.ToString();
+        string num3 = rem.ToString();
 
         return letter1 + letter2 + num1 + num2 + num3;
     }
