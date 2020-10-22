@@ -10,27 +10,30 @@ public class Robot
     const int NUM2_DIV = 10;
     const char LETTER_A = 'A';
     static Random rnd = new Random();
-
     static List<int> availableNames = new List<int>();
-    static Robot() {
-        for (var i = 0; i < TOTAL_NAMES; i++) {
+    static Robot()
+    {
+        for (var i = 0; i < TOTAL_NAMES; i++)
+        {
             Robot.availableNames.Add(i);
         }
     }
 
-    static String robotLetter(int n, int div) {
-        char c = (char)(Math.Floor((double)n/div ) + LETTER_A);
+    static String RobotLetter(int n, int div)
+    {
+        char c = (char)(Math.Floor((double)n / div) + LETTER_A);
         return c.ToString();
-    } 
+    }
 
-    static String translateName(int number) {
-        String letter1 = robotLetter(number, LETTER1_DIV);
+    static String TranslateName(int number)
+    {
+        String letter1 = RobotLetter(number, LETTER1_DIV);
         var rem = number % LETTER1_DIV;
-        String letter2 = robotLetter(rem, LETTER2_DIV);
+        String letter2 = RobotLetter(rem, LETTER2_DIV);
         rem = rem % LETTER2_DIV;
-        String num1 = Math.Floor((double)rem / NUM1_DIV).ToString();
-        rem = rem % NUM1_DIV;
-        String num2 = Math.Floor((double)rem / NUM2_DIV).ToString();
+
+        String num1 = Math.DivRem(rem, NUM1_DIV, out rem).ToString();
+        String num2 = Math.DivRem(rem, NUM2_DIV, out rem).ToString();
         rem = rem % NUM2_DIV;
         String num3 = rem.ToString();
 
@@ -42,15 +45,15 @@ public class Robot
     {
         get
         {
-            if(this._name!=null) {
+            if (this._name != null)
+            {
                 return this._name;
             }
-            
 
             var idx = rnd.Next(availableNames.Count);
             var nameNumber = Robot.availableNames[idx];
             Robot.availableNames.Remove(nameNumber);
-            this._name = translateName(nameNumber);
+            this._name = TranslateName(nameNumber);
             return this._name;
 
         }
@@ -59,7 +62,5 @@ public class Robot
     public void Reset()
     {
         this._name = null;
-        
-        
     }
 }
