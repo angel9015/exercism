@@ -19,11 +19,8 @@ public class Robot
         }
     }
 
-    static string RobotLetter(int n, int div)
-    {
-        char c = (char)(Math.Floor((double)n / div) + LETTER_A);
-        return c.ToString();
-    }
+    static string RobotLetter(int n, int div) => ((char)(Math.DivRem(n, div, out int _rem) + LETTER_A)).ToString();
+    
 
     static string TranslateName(int number)
     {
@@ -55,7 +52,6 @@ public class Robot
             Robot.availableNames.Remove(nameNumber);
             this._name = TranslateName(nameNumber);
             return this._name;
-
         }
     }
 
