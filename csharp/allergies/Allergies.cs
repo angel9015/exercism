@@ -29,7 +29,7 @@ public class Allergies
 
     }
 
-    public bool IsAllergicTo(Allergen allergen) => Array.FindIndex(_allergens, x=> x==allergen) >=0 ;
+    public bool IsAllergicTo(Allergen allergen) => Array.Exists(_allergens, x => x==allergen) ;
     
     public Allergen[] List() =>  _allergens;
     
