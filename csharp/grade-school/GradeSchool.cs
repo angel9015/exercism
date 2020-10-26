@@ -10,8 +10,16 @@ public class Student {
         _grade = grade;
     }
 
-    public string Name {get; }
-    public string Grade {get; }
+    public string Name {
+        get {
+            return _name;
+        } 
+    }
+    public int Grade {
+        get {
+            return _grade; 
+        }
+    }
 }
 
 public class GradeSchool
@@ -24,11 +32,11 @@ public class GradeSchool
 
     public IEnumerable<string> Roster()
     {
-        return _school.Select(st => st.Name);
+        return _school.OrderBy(st => st.Grade).ThenBy( st => st.Name).Select(st => st.Name).ToList().ToArray();
     }
 
     public IEnumerable<string> Grade(int grade)
     {
-        throw new NotImplementedException("You need to implement this function.");
+        return _school.OrderBy(st => st.Name).Where(st => st.Grade == grade).Select(st => st.Name).ToList().ToArray();
     }
 }
