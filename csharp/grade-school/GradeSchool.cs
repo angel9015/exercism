@@ -32,11 +32,11 @@ public class GradeSchool
 
     public IEnumerable<string> Roster()
     {
-        return _school.OrderBy(st => st.Grade).ThenBy( st => st.Name).Select(st => st.Name).ToList().ToArray();
+        return _school.OrderBy(st => st.Grade).ThenBy( st => st.Name).Select(st => st.Name).ToArray();
     }
 
     public IEnumerable<string> Grade(int grade)
     {
-        return _school.OrderBy(st => st.Name).Where(st => st.Grade == grade).Select(st => st.Name).ToList().ToArray();
+        return _school.OrderBy(st => st.Name).Where(st => st.Grade == grade).Select(st => st.Name).ToArray();
     }
 }
