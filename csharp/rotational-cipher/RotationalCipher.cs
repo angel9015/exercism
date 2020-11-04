@@ -3,7 +3,7 @@ using System.Linq;
 
 public static class RotationalCipher
 {
-    public static char rot(char c, char a, char z, int shiftKey)
+    public static char RotSingle(char c, char a, char z, int shiftKey)
     {
         if (c < a || c > z) return c;
         char r = (char)((int)c + shiftKey % 26);
@@ -15,9 +15,9 @@ public static class RotationalCipher
         return r;
     }
     public static string Rotate(string text, int shiftKey) => string.Join("", text.Select(
-        c => rot(c, 'a', 'z', shiftKey)
+        c => RotSingle(c, 'a', 'z', shiftKey)
     ).Select(
-        c => rot(c, 'A', 'Z', shiftKey)
+        c => RotSingle(c, 'A', 'Z', shiftKey)
     ).ToArray());
 
 }
