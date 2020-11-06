@@ -20,9 +20,9 @@ public class CircularBuffer<T>
     {
         if(_size == 0) throw new InvalidOperationException();
         _size --;
-        T el = _buffer[_writeIdx];
-        _writeIdx --;
-        if(_writeIdx < 0) _writeIdx = _capacity-1;
+        T el = _buffer[_readIdx];
+        _readIdx ++;
+        if(_readIdx >= _capacity) _readIdx  = 0;
         return el;
 
     }
@@ -33,16 +33,27 @@ public class CircularBuffer<T>
         _size ++;
         _buffer[_writeIdx] = value;
         _writeIdx ++;
-        if(_writeIdx >= _size) _writeIdx = 0;
+        if(_writeIdx >= _capacity) _writeIdx = 0;
     }
 
     public void Overwrite(T value)
     {
-        throw new NotImplementedException("You need to implement this function.");
+        if(_size < _capacity) {
+            _size ++;
+            _buffer[_writeIdx] = value;
+            _writeIdx ++;
+            if(_writeIdx >= _capacity) _writeIdx = 0;
+        } else {
+            _buffer[_readIdx] = value;
+            _readIdx ++;
+            if(_readIdx >= _capacity) _readIdx = 0;
+        }
     }
 
     public void Clear()
     {
-        throw new NotImplementedException("You need to implement this function.");
+        _size = 0;
+        _readIdx = 0;
+        _writeIdx = 0;
     }
 }
