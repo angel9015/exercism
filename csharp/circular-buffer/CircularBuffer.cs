@@ -20,9 +20,8 @@ public class CircularBuffer<T>
     {
         if(_size == 0) throw new InvalidOperationException();
         _size --;
-        T el = _buffer[_readIdx];
-        _readIdx ++;
-        if(_readIdx >= _capacity) _readIdx  = 0;
+        T el = _buffer[_readIdx++ % _capacity];
+        
         return el;
 
     }
@@ -31,22 +30,15 @@ public class CircularBuffer<T>
     {
         if(_size == _capacity) throw new InvalidOperationException();
         _size ++;
-        _buffer[_writeIdx] = value;
-        _writeIdx ++;
-        if(_writeIdx >= _capacity) _writeIdx = 0;
+        _buffer[_writeIdx++ %_capacity ] = value;
     }
 
     public void Overwrite(T value)
     {
         if(_size < _capacity) {
-            _size ++;
-            _buffer[_writeIdx] = value;
-            _writeIdx ++;
-            if(_writeIdx >= _capacity) _writeIdx = 0;
+            Write(value);
         } else {
-            _buffer[_readIdx] = value;
-            _readIdx ++;
-            if(_readIdx >= _capacity) _readIdx = 0;
+            _buffer[_readIdx++ %_capacity] = value;
         }
     }
 
