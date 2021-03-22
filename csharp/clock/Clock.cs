@@ -1,6 +1,7 @@
 using System;
 
-public class Clock
+public class Clock : IEquatable<Clock>
+
 {
     int _minutes = 0;
     public Clock(int hours, int minutes)
@@ -28,9 +29,9 @@ public class Clock
         int m = _minutes % 60;
         return h.ToString().PadLeft(2, '0')+":" + m.ToString().PadLeft(2, '0');
     }
-
-    public override bool Equals(object obj)
+    
+    public bool Equals(Clock c)
     {
-        return this.ToString() == obj.ToString();
+        return this.ToString() == c.ToString();
     }
 }
