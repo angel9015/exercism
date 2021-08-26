@@ -12,26 +12,22 @@ const isQuestion = (input: string) => input.endsWith('?')
 const isAllCaps = (input: string) => input.toUpperCase() === input && input.toUpperCase() !== input.toLowerCase()
 const isCapsQuestion = (input: string) => isAllCaps(input) && isQuestion(input)
 
-const Mapper: Record<keyof typeof Answer, (input: string)=>boolean> = {
-  EMPTY: isEmpty,
-  CAPS_QUESTION: isCapsQuestion,
-  QUESTION: isQuestion,
-  ALL_CAPS: isAllCaps,
-  OTHER: () => true
-}
+const messages = [
+  { criteria: isEmpty, answer: Answer.EMPTY },
+  { criteria: isCapsQuestion, answer: Answer.CAPS_QUESTION },
+  { criteria: isQuestion, answer: Answer.QUESTION },
+  { criteria: isAllCaps, answer: Answer.ALL_CAPS }
+]
 
 class Bob {
 
   hey(input: string): Answer {
     input = input.trim()
 
-    for(const key of  typeof Answer) {
-      
-        let f = Mapper[key]
-        if(f(input)) {
-          return Answer[key]
-        }
-      
+    for(let message of messages) {
+      if(message.criteria(input)) {
+        return message.answer
+      }
     }
     return Answer.OTHER
   }
